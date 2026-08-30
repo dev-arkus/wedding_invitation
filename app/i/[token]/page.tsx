@@ -1,21 +1,23 @@
 import { notFound } from 'next/navigation';
 
 import { NightSky } from '../../components/NightSky';
-import { Lockup } from '../../components/Lockup';
+import { Hero } from '../../components/Hero';
 import { Countdown } from '../../components/Countdown';
-import { EventSection } from '../../components/EventSection';
+import { MisaSection } from '../../components/MisaSection';
+import { RecepcionSection } from '../../components/RecepcionSection';
 import { CouplePhoto } from '../../components/CouplePhoto';
 import { MusicButton } from '../../components/MusicButton';
 import { DataUnavailable } from '../../components/DataUnavailable';
 import { DressCode } from '../../components/DressCode';
-import { Panel, Rule } from '../../components/Panel';
 import { RsvpForm } from '../../components/RsvpForm';
 import { RsvpReadOnly } from '../../components/RsvpReadOnly';
+import { Panel, Rule } from '../../components/Panel';
 
 import { getConfig, getInvitation, checkScheduleCoherence } from '../../lib/registry';
 import { SheetsError, explainSheetsError } from '../../lib/google/sheets';
 import { backgroundMusic, churchPhoto, couplePhoto, venuePhoto } from '../../lib/photos';
 import { serverNow, isRsvpClosed } from '../../lib/clock';
+import { TIMEZONE } from '../../lib/time';
 import { copy } from '../../lib/copy';
 
 /**
@@ -24,6 +26,11 @@ import { copy } from '../../lib/copy';
  * Siempre dinámica: lee el Sheet en cada visita, así una edición manual de la
  * planner se ve de inmediato. Con ~30 invitaciones abiertas unas pocas veces al
  * año no hay nada que valga la pena cachear.
+ *
+ * ── El ritmo claro/oscuro ────────────────────────────────────────────────────
+ * Hero, contador, misa y recepción van oscuros: son la atmósfera, y el cielo
+ * tiene que verse. Dress code y confirmación van claros: son donde el invitado
+ * ACTÚA, y una superficie crema les da el mejor contraste de la página.
  */
 export const dynamic = 'force-dynamic';
 
@@ -43,8 +50,7 @@ export default async function InvitationPage({ params }: PageProps) {
     [invitation, config] = await Promise.all([getInvitation(token), getConfig()]);
   } catch (error) {
     // Un fallo de lectura NO es un 404: la invitación puede existir
-    // perfectamente y ser el Sheet el que no responde. Decirle a un invitado
-    // real que su enlace no sirve sería peor que decirle que reintente.
+    // perfectamente y ser el Sheet el que no responde.
     if (error instanceof SheetsError) {
       console.error(`[invitation] ${explainSheetsError(error.cause)}`);
       console.error('[invitation] detalle:', error.cause ?? error);
@@ -60,6 +66,18 @@ export default async function InvitationPage({ params }: PageProps) {
   // se renderiza; el endpoint lo vuelve a comprobar antes de escribir.
   const closed = isRsvpClosed();
 
+  const remaining = config.misaAt - now;
+  const daysAway = Math.ceil(remaining / 86_400_000);
+
+  // La fecha se formatea en servidor: así `Intl` no viaja al cliente y el texto
+  // sale idéntico en todos los dispositivos, sin importar su configuración.
+  const formattedDate = new Intl.DateTimeFormat('es-VE', {
+    timeZone: TIMEZONE,
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(config.misaAt));
+
   return (
     <>
       <NightSky fromInstant={config.misaAt} toInstant={config.recepcionAt} />
@@ -67,55 +85,46 @@ export default async function InvitationPage({ params }: PageProps) {
 
       <main className="relative">
         <section className="grid min-h-dvh place-items-center px-6">
-          <div>
-            <p
-              aria-hidden="true"
-              className="mb-8 text-center font-body text-[0.7rem] font-light tracking-eyebrow text-hueso/60"
-            >
-              {copy.hero.eyebrow}
-            </p>
-            <Lockup />
-          </div>
+          <Hero daysAway={daysAway} />
         </section>
-
-        <div className="px-5 py-8">
-          <Panel className="py-14">
-            <Countdown
-              target={config.misaAt}
-              initialRemaining={config.misaAt - now}
-              closingMessage={config.closingMessage}
-            />
-          </Panel>
-        </div>
 
         <CouplePhoto photo={couplePhoto} />
 
-        <EventSection
+        {/* El contador va a sangre, sin esquinas y SIN FONDO: el cielo se ve a
+            través. La legibilidad la sostiene el guardarraíl del propio bloque de
+            texto, no un panel que tape las estrellas. */}
+        <section className="border-y border-oro/25 px-5 py-16">
+          <Countdown
+            target={config.misaAt}
+            initialRemaining={remaining}
+            formattedDate={formattedDate}
+            closingMessage={config.closingMessage}
+          />
+        </section>
+
+        <MisaSection
           title={copy.misa.title}
           at={config.misaAt}
-          place={config.misa}
+          venue={config.misa}
           body={copy.misa.body(config.misa.place)}
-          photo={churchPhoto ?? undefined}
+          photo={churchPhoto}
         />
 
-        <EventSection
+        <RecepcionSection
           title={copy.recepcion.title}
           at={config.recepcionAt}
-          place={config.recepcion}
+          venue={config.recepcion}
           body={copy.recepcion.body(config.recepcion.place)}
-          photo={venuePhoto ?? undefined}
+          photo={venuePhoto}
         />
 
-        {/* Sin dress code definido la sección desaparece entera: ni título
-            huérfano, ni "por confirmar", ni hueco. */}
+        {/* Sin dress code definido la sección desaparece entera. */}
         <DressCode value={config.dressCode} />
 
-        {/* Los nombres viajan en el HTML inicial: sin destello de carga y sin
-            que el navegador toque Google. */}
         <div className="px-5 pb-28 pt-8">
-          <Panel>
-            <h2 className="font-display text-[clamp(2rem,10vw,2.75rem)]">{copy.rsvp.title}</h2>
-            <Rule className="mt-5" />
+          <Panel tone="claro">
+            <h2 className="font-display text-[clamp(1.9rem,9vw,2.6rem)]">{copy.rsvp.title}</h2>
+            <Rule tone="claro" className="mt-5" />
 
             <div className="mt-7">
               {closed ? (

@@ -29,7 +29,7 @@ export interface GuestChoiceProps {
 export function GuestChoice({ id, name, value, onChange, missing, disabled }: GuestChoiceProps) {
   return (
     <fieldset
-      className="border-b border-hueso/15 py-4"
+      className="border-b border-navy/15 py-4"
       aria-invalid={missing || undefined}
     >
       <legend className="sr-only">{name}</legend>
@@ -37,7 +37,7 @@ export function GuestChoice({ id, name, value, onChange, missing, disabled }: Gu
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
         <span
           aria-hidden="true"
-          className={`font-display text-xl leading-snug ${missing ? 'text-luz' : ''}`}
+          className={`font-body text-[1.05rem] font-normal leading-snug ${missing ? 'text-oro-tinta' : ''}`}
         >
           {name}
         </span>
@@ -66,13 +66,13 @@ export function GuestChoice({ id, name, value, onChange, missing, disabled }: Gu
                   className={
                     'relative font-body text-base transition-colors duration-200 ' +
                     'peer-focus-visible:outline peer-focus-visible:outline-2 ' +
-                    'peer-focus-visible:outline-offset-8 peer-focus-visible:outline-luz ' +
+                    'peer-focus-visible:outline-offset-8 peer-focus-visible:outline-oro-tinta ' +
                     // El filete se dibuja de izquierda a derecha al elegir.
                     "after:absolute after:-bottom-2 after:left-0 after:right-0 after:h-px " +
-                    'after:origin-left after:scale-x-0 after:bg-oro ' +
+                    'after:origin-left after:scale-x-0 after:bg-oro-tinta ' +
                     'after:transition-transform after:duration-200 after:content-[""] ' +
                     'peer-checked:after:scale-x-100 ' +
-                    (checked ? 'text-hueso' : 'text-hueso/60')
+                    (checked ? 'text-navy' : 'text-navy/55')
                   }
                 >
                   {option === 'si' ? 'Sí' : 'No'}

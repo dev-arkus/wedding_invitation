@@ -269,9 +269,14 @@ export function NightSky({ fromInstant, toInstant }: NightSkyProps) {
      * El hero es del cielo; de ahí para abajo el cielo cede y el texto manda.
      * Es la otra mitad de "de crepúsculo a noche cerrada": el campo no solo
      * rota, también se hunde.
+     *
+     * Tope al 35% y no al 55%: con el contador sin fondo, un velo fuerte
+     * apagaba justo las estrellas que se supone deben verse a través de él.
+     * Oscurecer lo suficiente para que el texto mande, no tanto como para que
+     * el cielo desaparezca.
      */
     function drawVeil() {
-      const veil = scrollProgress() * 0.55;
+      const veil = scrollProgress() * 0.35;
       if (veil <= 0.001) return;
       main.setTransform(1, 0, 0, 1, 0, 0);
       main.globalCompositeOperation = 'source-over';

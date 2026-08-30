@@ -3,16 +3,20 @@ module.exports = {
   content: ['./app/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      // `<alpha-value>` es lo que permite `bg-navy/80`, `text-hueso/60`, etc.
+      // Sin esto Tailwind descarta el modificador de opacidad sin avisar.
       colors: {
-        noche: 'var(--noche)',
-        navy: 'var(--navy)',
-        'azul-luz': 'var(--azul-luz)',
-        oro: 'var(--oro)',
-        luz: 'var(--luz)',
-        hueso: 'var(--hueso)',
+        noche: 'rgb(var(--noche-rgb) / <alpha-value>)',
+        navy: 'rgb(var(--navy-rgb) / <alpha-value>)',
+        'azul-luz': 'rgb(var(--azul-luz-rgb) / <alpha-value>)',
+        oro: 'rgb(var(--oro-rgb) / <alpha-value>)',
+        luz: 'rgb(var(--luz-rgb) / <alpha-value>)',
+        hueso: 'rgb(var(--hueso-rgb) / <alpha-value>)',
+        'oro-tinta': 'rgb(var(--oro-tinta-rgb) / <alpha-value>)',
       },
       fontFamily: {
-        display: ['var(--font-display)', 'Didot', 'Bodoni MT', 'Georgia', 'serif'],
+        script: ['var(--font-script)', 'Snell Roundhand', 'cursive'],
+        display: ['var(--font-display)', 'Optima', 'Georgia', 'serif'],
         body: ['var(--font-body)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       borderRadius: {

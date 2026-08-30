@@ -26,7 +26,7 @@ export const copy = {
   },
 
   misa: {
-    title: 'La misa',
+    title: 'Misa',
     body: (place: string) =>
       place
         ? `Nos casamos en ${place}. Nos encantaría verte desde el principio.`
@@ -34,7 +34,7 @@ export const copy = {
   },
 
   recepcion: {
-    title: 'La recepción',
+    title: 'Recepción',
     body: (place: string) =>
       place
         ? `Después seguimos en ${place}. Habrá comida, música y ganas de celebrar.`

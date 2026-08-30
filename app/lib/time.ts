@@ -92,34 +92,19 @@ export function wallParts(instantMs: number, timeZone: string = TIMEZONE) {
   };
 }
 
-const ROMAN: ReadonlyArray<readonly [number, string]> = [
-  [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'],
-  [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'],
-  [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I'],
-];
-
-export function toRoman(n: number): string {
-  if (!Number.isInteger(n) || n <= 0) return '';
-  let rest = n;
-  let out = '';
-  for (const [value, symbol] of ROMAN) {
-    while (rest >= value) {
-      out += symbol;
-      rest -= value;
-    }
-  }
-  return out;
-}
-
 /**
- * Marcador estructural de sección: la hora del evento en numeral romano.
- * Las 18:00 de Caracas se leen `VI · 00`; las 20:00, `VIII · 00`.
+ * Marcador de sección: la hora del evento.
+ *
+ * Antes iba en numeral romano. La pareja lo pidió en cifras normales, y tienen
+ * razón: el romano obligaba a traducir mentalmente algo que solo hacía falta
+ * leer. Un marcador estructural debe cargar información, no cifrarla.
  */
 export function hourMarker(instantMs: number): string {
   const { hour, minute } = wallParts(instantMs);
   const h12 = hour % 12 === 0 ? 12 : hour % 12;
-  return `${toRoman(h12)} · ${String(minute).padStart(2, '0')}`;
+  return `${h12}:${String(minute).padStart(2, '0')}`;
 }
+
 /**
  * Hora de pared en formato `6:00 PM`.
  *

@@ -54,8 +54,8 @@
 - [x] 6.5 Implementar los botones de navegación directa a Google Maps y Waze a partir de las coordenadas de `Config`
 - [x] 6.6 Implementar la degradación en tres escalones del bloque de lugar: foto+mapa / solo mapa / solo dirección
 - [x] 6.7 Implementar la sección de dress code, omitida por completo cuando la clave está vacía
-- [ ] 6.8 (componente listo; falta la foto) Preparar y colocar la foto de la pareja: duotono navy→ámbar, a sangre, estrellas al 15% encima, placeholder oscuro, ≤80KB
-- [ ] 6.9 (componente listo; faltan las fotos) Preparar y colocar las fotos de iglesia y salón: 3:2, enmarcadas con filete, viradas apenas, ≤50KB cada una
+- [x] 6.8 Preparar y colocar la foto de la pareja: duotono navy→ámbar, a sangre, estrellas al 15% encima, placeholder oscuro, ≤80KB
+- [x] 6.9 Preparar y colocar las fotos de iglesia y salón: 3:2, enmarcadas con filete, viradas apenas, ≤50KB cada una
 - [ ] 6.10 (componente listo; falta el audio) Implementar el botón persistente de música: `preload="none"`, sin autoplay, en bucle, con pausa al ocultarse la pestaña
 - [x] 6.11 Redactar todo el texto en «tú», con variantes singular y plural según el número de invitados de la invitación
 

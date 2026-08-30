@@ -13,9 +13,11 @@ import { readFileSync } from 'node:fs';
 
 const css = readFileSync(new URL('../app/globals.css', import.meta.url), 'utf8');
 
+// Los tokens se declaran como canales RGB sueltos (ver globals.css); aquí se
+// vuelven a componer en hex para poder calcular luminancias.
 const tokens = {};
-for (const [, name, hex] of css.matchAll(/--([a-z-]+):\s*(#[0-9a-fA-F]{6})\s*;/g)) {
-  tokens[name] = hex;
+for (const [, name, r, g, b] of css.matchAll(/--([a-z-]+)-rgb:\s*(\d+)\s+(\d+)\s+(\d+)\s*;/g)) {
+  tokens[name] = '#' + [r, g, b].map((c) => Number(c).toString(16).padStart(2, '0')).join('');
 }
 
 /** Luminancia relativa según WCAG 2.1. */
@@ -58,6 +60,12 @@ const CHECKS = [
   ['oro sobre navy', tokens.oro, tokens.navy, 4.5, 'filetes sobre superficie'],
   ['noche sobre oro', tokens.noche, tokens.oro, 4.5, 'texto en selección'],
   ['hueso sobre azul-luz', tokens.hueso, tokens['azul-luz'], 4.5, 'texto sobre el azul claro'],
+
+  // Paneles claros: el dorado normal no sirve aquí, por eso existe --oro-tinta.
+  ['navy sobre hueso', tokens.navy, tokens.hueso, 4.5, 'texto en panel claro'],
+  ['navy 70% sobre hueso', over(tokens.navy, tokens.hueso, 0.7), tokens.hueso, 4.5, 'secundario en panel claro'],
+  ['oro-tinta sobre hueso', tokens['oro-tinta'], tokens.hueso, 4.5, 'acentos en panel claro'],
+  ['hueso sobre oro-tinta', tokens.hueso, tokens['oro-tinta'], 4.5, 'botón lleno en panel claro'],
 ];
 
 let failures = 0;

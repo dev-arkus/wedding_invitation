@@ -1,34 +1,31 @@
-import { Marcellus, Jost } from 'next/font/google';
+import { Parisienne, Italiana, Jost } from 'next/font/google';
 
 /**
- * Dos familias, subset latino.
+ * Tres familias, cada una con un trabajo que no comparte con las otras.
  *
- * ── Por qué NO Bodoni Moda ───────────────────────────────────────────────────
- * Era la elección original, por el argumento de que sus trazos finos tienen el
- * grosor de los cables de luz del techo de la recepción. Se ve precioso a 88px.
+ * ── Parisienne · solo los nombres del hero ───────────────────────────────────
+ * Caligráfica. Aparece UNA vez en toda la invitación, a tamaño grande. Esa
+ * restricción es lo que la salva: una cursiva repartida por la página se lee a
+ * plantilla, pero como firma única funciona — porque eso es, una firma.
  *
- * Pero una didone es una tipografía de DISPLAY: su contraste extremo entre
- * grueso y fino la vuelve difícil de leer en cuanto baja de tamaño, y sobre
- * fondo oscuro los pelos se comen directamente. Los nombres de los invitados a
- * 20px se leían mal. La legibilidad de un texto que la gente tiene que leer para
- * decidir algo vale más que una metáfora bonita.
+ * ── Italiana · títulos y nombres de lugar ────────────────────────────────────
+ * Romana de trazo fino y aire art déco. Solo se usa de 24px para arriba; por
+ * debajo de eso volvería el problema que tuvimos con Bodoni.
  *
- * ── Por qué Marcellus ────────────────────────────────────────────────────────
- * Es capital romana de inscripción: la letra que se talla en piedra. Trazo
- * parejo, así que aguanta a cualquier tamaño y sobre cualquier fondo.
- *
- * Y encaja mejor con lo que ya había: los marcadores de sección son numerales
- * romanos (`VI · 00`, `VIII · 00`), y la misa es en una iglesia. Una letra
- * lapidaria pertenece a ese mundo mucho más que una didone de moda francesa.
- *
- * De paso pesa menos: es estática de un solo peso, no variable.
- *
- * Jost se queda para etiquetas, botones y texto corrido: geométrica de los años
- * treinta, y sobre fondo oscuro una sans de bajo contraste se lee mucho mejor
- * que una garalda, que a cuerpo pequeño titila.
+ * ── Jost · todo lo demás ─────────────────────────────────────────────────────
+ * Texto corrido, etiquetas, botones y las cifras del contador. Geométrica de
+ * bajo contraste: es la que aguanta los tamaños chicos sobre fondo oscuro, y la
+ * única que toca texto que alguien tiene que leer para decidir algo.
  */
 
-export const display = Marcellus({
+export const script = Parisienne({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: '400',
+  variable: '--font-script',
+});
+
+export const display = Italiana({
   subsets: ['latin'],
   display: 'swap',
   weight: '400',
@@ -41,4 +38,4 @@ export const body = Jost({
   variable: '--font-body',
 });
 
-export const fontVariables = `${display.variable} ${body.variable}`;
+export const fontVariables = `${script.variable} ${display.variable} ${body.variable}`;

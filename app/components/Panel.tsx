@@ -17,18 +17,29 @@
 export function Panel({
   children,
   className = '',
+  tone = 'oscuro',
 }: {
   children: React.ReactNode;
   className?: string;
+  /**
+   * `claro` invierte el panel a crema con texto navy.
+   *
+   * No es variedad por variedad: **lo que se lee va oscuro y atmosférico, lo que
+   * se hace va claro y nítido.** El dress code y la confirmación son las dos
+   * secciones donde el invitado actúa, y una superficie clara les da el mejor
+   * contraste de toda la página.
+   */
+  tone?: 'oscuro' | 'claro';
 }) {
+  const surface =
+    tone === 'claro'
+      ? 'border-oro-tinta/30 bg-hueso text-navy shadow-[0_18px_40px_rgba(0,0,0,.35)]'
+      : 'border-oro/25 bg-navy/80 text-hueso backdrop-blur-[6px]';
+
   return (
     <section
       data-sky-guard
-      className={
-        'relative mx-auto w-full max-w-md rounded-3xl border border-oro/25 ' +
-        'bg-navy/80 px-6 py-12 backdrop-blur-[6px] sm:px-8 ' +
-        className
-      }
+      className={`relative mx-auto w-full max-w-md rounded-3xl border px-6 py-12 sm:px-8 ${surface} ${className}`}
     >
       {children}
     </section>
@@ -39,8 +50,13 @@ export function Panel({
  * Filete corto de tinta. Separa el título de su contenido en todas las
  * secciones, y es lo único que se repite entre ellas.
  */
-export function Rule({ className = '' }: { className?: string }) {
-  return <div aria-hidden="true" className={`h-px w-16 bg-oro ${className}`} />;
+export function Rule({ className = '', tone = 'oscuro' }: { className?: string; tone?: 'oscuro' | 'claro' }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={`h-px w-16 ${tone === 'claro' ? 'bg-oro-tinta' : 'bg-oro'} ${className}`}
+    />
+  );
 }
 
 /**

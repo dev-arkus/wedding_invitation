@@ -25,20 +25,20 @@ export function DressCode({ value }: { value: string }) {
 
   return (
     <div className="px-5 py-8">
-      <Panel>
+      <Panel tone="claro">
         <h2 className="font-display text-[clamp(1.75rem,8vw,2.25rem)]">{copy.dressCode.title}</h2>
-        <Rule className="mt-5" />
+        <Rule tone="claro" className="mt-5" />
 
-        <p className="mt-6 font-display text-2xl leading-snug text-luz">{value}</p>
+        <p className="mt-6 font-display text-2xl leading-snug text-oro-tinta">{value}</p>
 
-        <p className="mt-8 font-body text-xs font-light tracking-eyebrow text-hueso/60">
+        <p className="mt-8 font-body text-xs font-light tracking-eyebrow text-navy/60">
           NUESTRA PALETA
         </p>
         <ul className="mt-4 flex flex-wrap gap-3">
           {SWATCHES.map((s) => (
             <li key={s.token}>
               <span
-                className={`block h-9 w-9 rounded-full border border-hueso/20 ${s.token}`}
+                className={`block h-9 w-9 rounded-full border border-navy/20 ${s.token}`}
                 role="img"
                 aria-label={s.label}
               />

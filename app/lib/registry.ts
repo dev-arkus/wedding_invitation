@@ -173,11 +173,25 @@ export interface WeddingConfig {
 export interface PlaceConfig {
   place: string;
   address: string;
-  /** `src` del iframe de maps/embed. Vacío = no se ofrece mapa. */
-  mapEmbed: string;
-  /** `lat,lng`. Vacío = no se ofrecen botones de navegación. */
+  /** `lat,lng`. Vacío = no se ofrece el botón de cómo llegar. */
   coords: string;
+  /** Place ID de Google. Opcional; hace el destino exacto. */
+  placeId: string;
 }
+
+/**
+ * Valores por defecto de la misa.
+ *
+ * La pareja ya confirmó estos datos, así que la invitación se ve completa desde
+ * el primer momento en vez de decir "Por confirmar". La pestaña `Config` los
+ * pisa en cuanto tenga algo: el Sheet sigue siendo la fuente de verdad.
+ */
+const MISA_POR_DEFECTO: PlaceConfig = {
+  place: 'Basílica de Táriba',
+  address: 'Carrera 5, frente a la Plaza Bolívar\nTáriba, estado Táchira',
+  coords: '7.8179561,-72.226584',
+  placeId: 'ChIJ4UmE3A1sZo4RbQd5LKEOXTE',
+};
 
 /**
  * Lee la pestaña `Config`.
@@ -207,16 +221,16 @@ export async function getConfig(): Promise<WeddingConfig> {
     misaAt: resolveInstant(get('misa_inicio'), misaAt(), 'misa_inicio'),
     recepcionAt: resolveInstant(get('recepcion_inicio'), recepcionAt(), 'recepcion_inicio'),
     misa: {
-      place: get('misa_lugar'),
-      address: get('misa_direccion'),
-      mapEmbed: get('misa_maps'),
-      coords: get('misa_coords'),
+      place: get('misa_lugar') || MISA_POR_DEFECTO.place,
+      address: get('misa_direccion') || MISA_POR_DEFECTO.address,
+      coords: get('misa_coords') || MISA_POR_DEFECTO.coords,
+      placeId: get('misa_place_id') || MISA_POR_DEFECTO.placeId,
     },
     recepcion: {
       place: get('recepcion_lugar'),
       address: get('recepcion_direccion'),
-      mapEmbed: get('recepcion_maps'),
       coords: get('recepcion_coords'),
+      placeId: get('recepcion_place_id'),
     },
     dressCode: get('dress_code'),
     closingMessage: get('mensaje_cierre'),

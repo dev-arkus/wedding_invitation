@@ -24,14 +24,14 @@ export function RsvpReadOnly({ guests }: { guests: Guest[] }) {
               : copy.results.partial(attending.map((g) => g.name))}
         </p>
       ) : (
-        <p className="font-body text-base font-light leading-relaxed text-hueso/80">
+        <p className="font-body text-base font-light leading-relaxed text-navy/80">
           No alcanzamos a recibir tu respuesta.
         </p>
       )}
 
-      <div aria-hidden="true" className="mt-8 h-px w-16 bg-oro" />
+      <div aria-hidden="true" className="mt-8 h-px w-16 bg-oro-tinta" />
 
-      <p className="mt-8 font-body text-sm font-light leading-relaxed text-hueso/60">
+      <p className="mt-8 font-body text-sm font-light leading-relaxed text-navy/60">
         {copy.frozen}
       </p>
     </div>

@@ -2,24 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-/*
- * Paleta calibrada a la temperatura del salón.
- *
- * Las luces colgantes de la decoración están cerca de 2200K: ámbar, no bronce.
- * De ahí que haya DOS dorados con papeles distintos:
- *   --oro  es TINTA  (filetes, subrayados, grabado)
- *   --luz  es LUZ    (estrellas, brillos, foco de teclado)
- *
- * Entibiar el dorado también sube el contraste: --luz da 10.8:1 sobre navy
- * contra los 5.1:1 de --oro. Estética y accesibilidad apuntan al mismo lado.
- */
 :root {
-  --noche: #0d1226;
-  --navy: #1a2340;
-  --azul-luz: #2b3e6b;
-  --oro: #b8862f;
-  --luz: #ffc97a;
-  --hueso: #f2ebe0;
+  /*
+   * Los colores se declaran como CANALES RGB sueltos, no como hex.
+   *
+   * Es lo que necesita Tailwind para poder aplicar opacidad: con `--oro: #b8862f`
+   * una clase como `bg-oro/60` no genera ninguna regla — se descarta en silencio
+   * y el elemento se queda sin fondo. Con los canales sueltos puede componer
+   * `rgb(var(--oro-rgb) / 0.6)`.
+   *
+   * Justo debajo se derivan las variables de color completas, para el CSS y los
+   * SVG que las usan directo.
+   */
+  --noche-rgb: 13 18 38;
+  --navy-rgb: 26 35 64;
+  --azul-luz-rgb: 43 62 107;
+  --oro-rgb: 184 134 47;
+  --luz-rgb: 255 201 122;
+  --hueso-rgb: 242 235 224;
+
+  /*
+   * Dorado para SUPERFICIES CLARAS.
+   *
+   * `--oro` sobre `--hueso` da 2.73:1 y no cumple para texto: nació para vivir
+   * sobre fondo oscuro. Los paneles claros necesitan su propio dorado, más
+   * hundido, que llega a 4.52:1.
+   */
+  --oro-tinta-rgb: 138 100 32;
+
+  --noche: rgb(var(--noche-rgb));
+  --navy: rgb(var(--navy-rgb));
+  --azul-luz: rgb(var(--azul-luz-rgb));
+  --oro: rgb(var(--oro-rgb));
+  --luz: rgb(var(--luz-rgb));
+  --hueso: rgb(var(--hueso-rgb));
+  --oro-tinta: rgb(var(--oro-tinta-rgb));
 
   color-scheme: dark;
 }
@@ -79,5 +96,29 @@
   100% {
     opacity: 1;
     transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Entrada del hero: cada elemento sube y aparece, escalonado. */
+@keyframes sube {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* La carta del contador que cambió gira sobre su borde superior. */
+@keyframes gira {
+  0% {
+    transform: rotateX(-88deg);
+    opacity: 0.25;
+  }
+  100% {
+    transform: rotateX(0);
+    opacity: 1;
   }
 }
