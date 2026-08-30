@@ -6,7 +6,7 @@ El problema no es "hacer una página bonita": es **control real de pases**. Un c
 
 ## What Changes
 
-**Aplicación nueva** (repositorio vacío hoy). Next.js 14 App Router + `googleapis` con service account, desplegada en Vercel. Reutiliza el patrón ya probado en el repo hermano `djfinanzas`.
+**Aplicación nueva** (repositorio vacío hoy). Next.js App Router + service account de Google, desplegada en Vercel. Reutiliza el patrón ya probado en el repo hermano `djfinanzas`.
 
 **Acceso y confirmación**
 - URL única por invitación `/i/{token}`. El token es la autenticación; sin login.
@@ -51,7 +51,7 @@ Ninguna. `openspec/specs/` está vacío — es el primer cambio del proyecto.
 
 **Repositorio**: hoy solo tiene `README.md` y `some_specs.md`. Este cambio crea la aplicación entera.
 
-**Dependencias nuevas**: `next@14`, `react@18`, `googleapis`, `tailwindcss`. Sin SDK de Google Maps (los mapas van por iframe de `maps/embed`, sin API key ni facturación).
+**Dependencias nuevas**: `next@15`, `react@18`, `google-auth-library`, `tailwindcss`. Sin SDK de Google Maps (los mapas van por iframe de `maps/embed`, sin API key ni facturación). Ver D1b en `design.md`: la línea 14.x de Next ya no recibe parches de seguridad, y `googleapis` (103 MB, con advisories) se cambió por `google-auth-library` (764 KB, limpio).
 
 **Servicios externos**:
 - Google Cloud: un service account con scope `spreadsheets`, y el Sheet compartido con su email.
@@ -61,6 +61,6 @@ Ninguna. `openspec/specs/` está vacío — es el primer cambio del proyecto.
 
 **Restricción de rendimiento**: los invitados abren esto desde datos móviles en Venezuela, casi todos en teléfono. Presupuesto de primera carga **≤ 250KB** (HTML + fuentes + catálogo de estrellas + JS). Las tres fotos, los mapas y el audio van por debajo del pliegue y no cargan hasta que hacen falta.
 
-**Riesgo técnico abierto**: falta validar que el recorte vertical del cielo calculado se vea bien en pantalla de teléfono. Se resuelve con un spike antes de construir alrededor.
+**Riesgo técnico**: resuelto. El spike validó el cielo calculado — proyección correcta (la altitud de Polaris coincide con la latitud del lugar), encuadre lleno de borde a borde en formato vertical, y composición que aguanta la rotación de la misa a la recepción. Ver `spike/DECISION.md`.
 
 **Decisiones pendientes que no bloquean**: coordenadas y direcciones de la parroquia y el salón, dress code, y si existen fotos aprovechables de ambos lugares. Todo eso entra por la pestaña `Config` o por el repo, sin cambios de arquitectura.

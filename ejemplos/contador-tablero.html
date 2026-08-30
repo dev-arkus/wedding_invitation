@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contador · Tablero · Dayo &amp; Javi</title>
+
+<!-- Si tu invitación ya carga fuentes, puedes quitar este link y usar las tuyas -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  /* --- solo para esta página de prueba, no forma parte del componente --- */
+  body{margin:0;background:#0C1124;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:40px 16px}
+</style>
+
+</head>
+<body>
+
+<!-- ══════════════════════════ COPIA DESDE AQUÍ ══════════════════════════ -->
+<style>
+/* Contador "Tablero" · todo va con prefijo .cr- para no chocar con tus estilos */
+.cr{
+  --cr-tinta:#1C2440;
+  --cr-noche:#3F4B78;
+  --cr-oro:#C08F2E;
+  --cr-champan:#E3BC72;
+  --cr-humo:#F2F1EF;
+
+  background:linear-gradient(#161D34,#10162A);
+  padding:56px 20px;
+  text-align:center;
+  font-family:'Jost',system-ui,sans-serif;
+  font-weight:300;
+  border-radius:4px;
+}
+.cr *{box-sizing:border-box;margin:0;padding:0}
+
+.cr__titulo{
+  color:var(--cr-oro);
+  font-size:10px;
+  letter-spacing:.42em;
+  text-transform:uppercase;
+  margin-bottom:26px;
+}
+
+.cr__fila{
+  display:flex;
+  justify-content:center;
+  gap:clamp(8px,2vw,16px);
+}
+
+.cr__carta{min-width:clamp(62px,15vw,92px)}
+
+.cr__cara{
+  position:relative;
+  background:#232C4D;
+  border:1px solid rgba(227,188,114,.28);
+  border-radius:6px;
+  padding:16px 10px 18px;
+  overflow:hidden;
+  box-shadow:0 10px 24px rgba(0,0,0,.45);
+}
+/* la costura del panel */
+.cr__cara::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; top:50%;
+  height:1px;
+  background:rgba(0,0,0,.45);
+}
+.cr__num{
+  display:block;
+  font-family:'Bodoni Moda',Georgia,serif;
+  font-weight:400;
+  font-size:clamp(32px,8vw,48px);
+  line-height:1;
+  color:var(--cr-champan);
+  font-variant-numeric:tabular-nums;
+  transform-origin:center top;
+  backface-visibility:hidden;
+}
+.cr__num--gira{animation:cr-gira .42s ease-out}
+@keyframes cr-gira{
+  0%{transform:rotateX(-88deg);opacity:.25}
+  100%{transform:rotateX(0);opacity:1}
+}
+
+.cr__etiqueta{
+  margin-top:11px;
+  color:#8D96B8;
+  font-size:9px;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+}
+
+.cr__fecha{
+  margin-top:30px;
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:17px;
+  color:rgba(242,241,239,.62);
+  letter-spacing:.14em;
+}
+
+/* estado "ya llegó el día" */
+.cr--llego .cr__fila{display:none}
+.cr__mensaje{display:none;font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(24px,6vw,38px);color:var(--cr-champan);letter-spacing:.06em}
+.cr--llego .cr__mensaje{display:block}
+
+@media (prefers-reduced-motion:reduce){
+  .cr__num--gira{animation:none}
+}
+</style>
+
+<div class="cr" id="contador">
+  <p class="cr__titulo">Faltan</p>
+
+  <div class="cr__fila" role="timer" aria-live="off">
+    <div class="cr__carta">
+      <div class="cr__cara"><span class="cr__num" data-cr="d">00</span></div>
+      <p class="cr__etiqueta">Días</p>
+    </div>
+    <div class="cr__carta">
+      <div class="cr__cara"><span class="cr__num" data-cr="h">00</span></div>
+      <p class="cr__etiqueta">Horas</p>
+    </div>
+    <div class="cr__carta">
+      <div class="cr__cara"><span class="cr__num" data-cr="m">00</span></div>
+      <p class="cr__etiqueta">Min</p>
+    </div>
+    <div class="cr__carta">
+      <div class="cr__cara"><span class="cr__num" data-cr="s">00</span></div>
+      <p class="cr__etiqueta">Seg</p>
+    </div>
+  </div>
+
+  <p class="cr__mensaje">Hoy nos casamos</p>
+  <p class="cr__fecha" data-cr-fecha></p>
+</div>
+
+<script>
+(function () {
+  /* ═══════ LO ÚNICO QUE TIENES QUE TOCAR ═══════
+     La hora es un estimado: cámbiala por la de la ceremonia.
+     El -04:00 fija la hora de Venezuela, así el invitado que abra
+     la invitación desde otro país ve el mismo conteo que tú.        */
+  var FECHA_BODA = new Date('2026-11-07T17:00:00-04:00');
+  /* ═════════════════════════════════════════════ */
+
+  var caja    = document.getElementById('contador');
+  var numeros = caja.querySelectorAll('[data-cr]');
+  var previos = {};
+
+  caja.querySelector('[data-cr-fecha]').textContent =
+    FECHA_BODA.toLocaleDateString('es-VE', { day:'numeric', month:'long', year:'numeric' });
+
+  function pad(n){ return String(n).padStart(2, '0'); }
+
+  function tic() {
+    var resto = FECHA_BODA - Date.now();
+
+    if (resto <= 0) {
+      caja.classList.add('cr--llego');
+      clearInterval(reloj);
+      return;
+    }
+
+    var v = {
+      d: pad(Math.floor(resto / 86400000)),
+      h: pad(Math.floor(resto / 3600000) % 24),
+      m: pad(Math.floor(resto / 60000) % 60),
+      s: pad(Math.floor(resto / 1000) % 60)
+    };
+
+    numeros.forEach(function (el) {
+      var k = el.dataset.cr;
+      if (previos[k] === v[k]) return;      // solo gira el que cambió
+      el.textContent = v[k];
+      el.classList.remove('cr__num--gira');
+      void el.offsetWidth;                  // reinicia la animación
+      el.classList.add('cr__num--gira');
+      previos[k] = v[k];
+    });
+
+    caja.querySelector('.cr__fila')
+        .setAttribute('aria-label', 'Faltan ' + (+v.d) + ' días y ' + (+v.h) + ' horas');
+  }
+
+  tic();
+  var reloj = setInterval(tic, 1000);
+
+  // pausa el conteo si la pestaña no está visible (ahorra batería en móvil)
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) { clearInterval(reloj); }
+    else { tic(); reloj = setInterval(tic, 1000); }
+  });
+})();
+</script>
+<!-- ══════════════════════════ HASTA AQUÍ ══════════════════════════ -->
+
+</body>
+</html>

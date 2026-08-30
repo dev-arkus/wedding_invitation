@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!--
+    Favicon: la estrella de cuatro puntas del hero, no el monograma.
+    A 16px "D & J" con filete es una mancha ilegible; esta forma se lee a
+    cualquier tamaño y es literalmente el elemento firma de la invitación.
+  -->
+  <rect width="32" height="32" fill="#0d1226"/>
+  <path
+    d="M16 2 Q17.4 14.6 30 16 Q17.4 17.4 16 30 Q14.6 17.4 2 16 Q14.6 14.6 16 2 Z"
+    fill="#ffc97a"/>
+</svg>

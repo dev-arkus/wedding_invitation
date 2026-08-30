@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Paleta calibrada a la temperatura del salón.
+ *
+ * Las luces colgantes de la decoración están cerca de 2200K: ámbar, no bronce.
+ * De ahí que haya DOS dorados con papeles distintos:
+ *   --oro  es TINTA  (filetes, subrayados, grabado)
+ *   --luz  es LUZ    (estrellas, brillos, foco de teclado)
+ *
+ * Entibiar el dorado también sube el contraste: --luz da 10.8:1 sobre navy
+ * contra los 5.1:1 de --oro. Estética y accesibilidad apuntan al mismo lado.
+ */
+:root {
+  --noche: #0d1226;
+  --navy: #1a2340;
+  --azul-luz: #2b3e6b;
+  --oro: #b8862f;
+  --luz: #ffc97a;
+  --hueso: #f2ebe0;
+
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--noche);
+    color: var(--hueso);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* El foco se ve siempre, y se ve en luz. Nunca se quita el outline. */
+  :focus-visible {
+    outline: 2px solid var(--luz);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  ::selection {
+    background-color: var(--oro);
+    color: var(--noche);
+  }
+}
+
+/*
+ * Movimiento reducido: todo se presenta en su estado final.
+ * Las animaciones del cielo se apagan en su propio componente; esto es la red
+ * de seguridad para cualquier transición que se agregue después.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* La estrella que se enciende al confirmar. Una vez, y se acabó. */
+@keyframes spark {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) rotate(-25deg);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1.15) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}

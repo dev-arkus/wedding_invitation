@@ -45,13 +45,43 @@ El pedido original era "el frontend se comunica con el Google Sheet". Literalmen
 | API key de Sheets en el bundle | Las API keys son de solo lectura → no se puede escribir el RSVP. Y la key queda pública igual |
 | **Capa servidor delgada** | La credencial vive en el servidor. El navegador nunca toca Google |
 
-Elegido: **Next.js 14 App Router en Vercel con service account** (`googleapis`, scope `spreadsheets`).
+Elegido: **Next.js App Router en Vercel con service account** (`google-auth-library`, scope `spreadsheets`).
 
 Alternativas consideradas:
 - **Google Apps Script Web App**: cero infraestructura y `LockService` da exclusión mutua real. Descartado por latencia de 300–1500ms, CORS problemático en POST (obliga al truco de `text/plain`), imposibilidad de renderizar los nombres en servidor, y un ciclo de pruebas pobre.
 - **Base de datos real con espejo al Sheet**: correcto y atómico, pero exige sincronización bidireccional para que las ediciones manuales de la planner regresen. Sobredimensionado para 30 invitaciones.
 
 El SSR es la ventaja decisiva: el servidor valida el token, lee el Sheet y entrega los nombres ya en el HTML. Sin destello de carga, sin credencial en el cliente, y la vista previa del enlace funciona sola.
+
+### D1b — Next 15, no Next 14; y `google-auth-library`, no `googleapis`
+
+*Decidido durante la implementación (tarea 2.1), corrigiendo lo que asumía D1.*
+
+**La línea 14.x de Next ya no recibe parches de seguridad.** `next@14.2.35` es la última versión de esa línea y arrastra ~20 advisories sin corregir, varios de severidad alta (denegación de servicio con Server Components, SSRF en Server Actions, envenenamiento de caché). Cada uno de esos parches aterrizó en `15.5.16` o `15.5.21`; ninguno se retroportó a 14.x.
+
+Elegido **`next@15.5.24`**, que limpia la lista completa. `next@16` también lo haría, pero es un salto mayor con más churn del que amerita. Next 15 acepta `react@^18.2.0` como peer, así que React se queda en 18.3.1 y el App Router funciona igual que lo asumía el diseño: la migración cuesta cero.
+
+**`googleapis` se cambia por `google-auth-library` + la API REST de Sheets.** Tres razones, en orden de peso:
+
+| | `googleapis@129` | `google-auth-library@11` |
+|---|---|---|
+| Tamaño instalado | **103 MB** | **764 KB** |
+| Advisories | gaxios, uuid, googleapis-common | ninguna |
+| Arranque en frío en Vercel | pesado | ligero |
+
+Solo se usan dos llamadas —`values.get` y `values.batchUpdate`— así que el cliente completo de todas las APIs de Google no compra nada. `googleapis` depende de `google-auth-library` de todos modos: se conserva exactamente el patrón JWT de `djfinanzas`, incluido el arreglo de `GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n')`, y se descarta el envoltorio.
+
+**Un `override` de npm fuerza `postcss@^8.5.26`**, porque Next fija internamente `8.4.31`, que tiene una lectura arbitraria de archivos vía `sourceMappingURL`. Es una herramienta de tiempo de compilación y aquí todo el CSS es propio, pero el override sale gratis y el build pasa igual. Resultado: **`npm audit` en cero**.
+
+### D1c — La raíz 404 sin página propia
+
+*Descubierto durante la implementación (tarea 3.2).*
+
+No existe `app/page.tsx`. La raíz cae en `not-found.tsx` por no coincidir con ninguna ruta, igual que cualquier URL desconocida y que un token inválido — los tres casos idénticos, como pide la spec.
+
+La alternativa obvia —un `app/page.tsx` que llame a `notFound()`— **no sirve**: Next resuelve un `notFound()` lanzado desde la raíz con su shell de error interno (`<html id="__next_error__">`), sin el layout. En desarrollo eso se ve como una página en blanco. Se probaron `force-dynamic` y una reescritura en `next.config.js`; ninguna lo cambia.
+
+En producción el shell sí enlaza el CSS y la página se ve correcta —monograma, fondo oscuro, tipografía—, así que el impacto real se reduce a que a `/` le falta el atributo `lang="es"`. Se documenta para que nadie "arregle" esto agregando una página raíz y reintroduzca el blanco en desarrollo.
 
 ### D2 — Forma del Sheet: normalizado, con superficie de escritura mínima
 
@@ -113,7 +143,7 @@ Las horas van en `Config` como `YYYY-MM-DD HH:mm`, interpretadas como hora de Ca
 
 La misa empieza a las 6:00 PM. A 7.7° de latitud norte en noviembre el sol se pone alrededor de las 5:55 PM. La ceremonia arranca justo al caer la luz y la fiesta transcurre entera de noche.
 
-Casi toda invitación de boda es color crema. Esta es oscura, y hay un argumento de accesibilidad que lo respalda: el dorado de la paleta sobre blanco hueso da 3.2:1 y no cumple WCAG para texto; sobre navy da 5.1:1 y sí. **Invertir el fondo convierte el dorado en un color usable en vez de un adorno restringido.**
+Casi toda invitación de boda es color crema. Esta es oscura, y hay un argumento de accesibilidad que lo respalda. Números calculados sobre la paleta final por `scripts/check-contrast.mjs`: el dorado sobre blanco hueso da **2.73:1** y no cumple WCAG para texto; sobre navy da **4.78:1** y sí. **Invertir el fondo convierte el dorado en un color usable en vez de un adorno restringido.**
 
 **Elemento firma: el cielo real de esa noche.** Posiciones astronómicas para San Cristóbal el 7 de noviembre de 2026 a las 6:00 PM, como puntos dorados sobre navy profundo.
 
@@ -134,7 +164,7 @@ Las bombillas de las fotos de referencia están cerca de 2200K: ámbar, no bronc
 --hueso      #F2EBE0   texto (100% / 60% / 40% para jerarquía)
 ```
 
-Dos dorados con roles distintos: `--oro` es tinta, `--luz` es luz. Entibiar el dorado también mejora el contraste — `#FFC97A` sobre navy da 10.8:1 frente a los 5.1:1 de `#B8862F`. La estética y la accesibilidad apuntan al mismo lado.
+Dos dorados con roles distintos: `--oro` es tinta, `--luz` es luz. Entibiar el dorado también mejora el contraste — `#FFC97A` sobre navy da **10.22:1** frente a los **4.78:1** de `#B8862F`. La estética y la accesibilidad apuntan al mismo lado.
 
 Se descartó un token de gris azulado intermedio: sobre fondo oscuro se ve sucio, y la opacidad del hueso da mejor jerarquía con un token menos.
 
@@ -156,6 +186,28 @@ Dos familias, subset latino.
 
 Los nombres tienen **exactamente 6 letras cada uno** (DAYONA / JAVIER), así que con tracking uniforme el bloque queda un rectángulo perfecto sin ajustes ópticos.
 
+### D8b — Bodoni Moda → Marcellus, y estructura en paneles
+
+*Revisión pedida por la pareja tras ver la invitación construida, con una referencia de diseño en verde y dorado.*
+
+**La tipografía.** D8 dejó anotado el riesgo: "si al ver el primer prototipo se siente severa, el cambio de una línea es a Marcellus". Se sintió peor que severa — **no se leía**. Una didone es una tipografía de display: su contraste extremo entre grueso y fino la vuelve frágil en cuanto baja de tamaño, y sobre fondo oscuro los pelos desaparecen. Los nombres de los invitados a 20px eran el peor caso, y son justo el texto que alguien tiene que leer para decidir algo.
+
+Se cambia a **Marcellus**, capital romana de inscripción. Trazo parejo, legible a cualquier tamaño y sobre cualquier fondo. Encaja además mejor con lo que ya existía —los marcadores son numerales romanos y la ceremonia es en una iglesia—, y pesa menos por ser estática en vez de variable.
+
+Se pierde el argumento de "los pelos de Bodoni tienen el grosor de los cables de luz". Era una metáfora bonita y cierta, pero la legibilidad de un texto accionable vale más.
+
+**La estructura.** El contenido pasa a vivir en **paneles**: navy translúcido con desenfoque de fondo, filete dorado y esquinas redondeadas. Antes cada sección flotaba directamente sobre el campo de estrellas y competía con él; se parcheaba atenuando estrellas (`data-sky-guard`), que funciona pero es defensivo. Un panel lo resuelve por diseño: el cielo se ve detrás, apagado, y el texto se apoya en una superficie propia. El guardarraíl se queda como segunda red para navegadores sin `backdrop-filter`.
+
+Las esquinas dejan de ser a filo vivo. En una invitación, una esquina dura se lee a formulario.
+
+**Los arcos.** Las fotos se enmarcan en arco. No es decoración: **un arco es la forma de una puerta de iglesia y de un vitral**, así que encierra cada imagen en la silueta del lugar donde empieza la boda. Con la foto real de la parroquia el efecto se vuelve literal — el marco repite los arcos de la propia fachada.
+
+**Las muestras del dress code.** Lo único que se toma tal cual de la referencia, porque es **información y no adorno**: alguien que lee "Etiqueta" sigue sin saber de qué color ir. Viendo la paleta, sí. Y son los mismos tokens de la página, así que la invitación le está diciendo al invitado de qué color va a ser el salón.
+
+**Lo que NO se tomó de la referencia:** la línea de tiempo con iconos (la boda tiene dos momentos, no cinco: una línea de tiempo de dos ítems no es una línea de tiempo), los iconos en círculos, y la alternancia de paneles claros y oscuros, que rompería la tesis de boda de noche.
+
+**El duotono, en dos intensidades.** Se implementa con un filtro SVG (`feComponentTransfer` con `tableValues`), no con `mix-blend-mode`: el truco de dos capas solo mapea los extremos y deja los tonos medios en gris, o sea una foto desaturada en vez de un duotono. La pareja va con la rampa completa navy → ámbar; los lugares con una rampa suave que conserva detalle y un resto de color, porque el punto de esas fotos es que se reconozca el sitio al llegar.
+
 ### D9 — Jerarquía de fotos: con marco es referencia, sin marco es mundo
 
 Tres fotos en un diseño oscuro y minimalista es donde las cosas se ensucian. Se resuelve separando por función:
@@ -174,9 +226,11 @@ Los lugares se viran apenas a propósito: un duotono fuerte sobre una iglesia la
 Degradación en tres escalones, cada uno una página terminada:
 ```
 foto + mapa       → la foto es la portada, se toca y sale el mapa
-sin foto          → mapa estático de portada
+sin foto          → panel enmarcado con el botón, sin imagen
 sin foto ni mapa  → solo dirección en texto, sin marcos vacíos
 ```
+
+*Corregido en la tarea 6.6:* el escalón intermedio decía "mapa estático de portada". No se puede — la Static Maps API de Google exige una key con facturación, que está explícitamente fuera de alcance. Un panel con filete y el botón es honesto y no cuesta nada; inventar una imagen de mapa falsa habría sido peor.
 
 Duotono no es solo estético: una imagen de dos colores comprime 4–5× mejor. Objetivo ≤80KB para la pareja, ≤50KB cada lugar.
 

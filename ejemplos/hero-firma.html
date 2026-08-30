@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero Firma · Dayona y Javier</title>
+
+<!-- Si tu invitación ya carga fuentes, quita este link y deja solo Parisienne -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400&family=Parisienne&display=swap" rel="stylesheet">
+
+<style>
+  /* solo para esta página de prueba, no forma parte del componente */
+  body{margin:0;font-family:'Jost',sans-serif}
+  .prueba{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:60px 20px;position:relative}
+  .prueba--oscuro{background:radial-gradient(130% 100% at 50% 0%,#33406B,#1C2440 48%,#0F1428)}
+  .prueba--claro{background:#F2F1EF}
+  .prueba--foto{background:linear-gradient(rgba(28,36,64,.55),rgba(28,36,64,.75)),url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1200') center/cover}
+  .marca{position:absolute;top:20px;left:24px;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(128,136,166,.9)}
+  .prueba--claro .marca{color:#8b91a8}
+</style>
+
+</head>
+<body>
+
+<section class="prueba prueba--oscuro">
+  <span class="marca">Sobre fondo oscuro</span>
+
+<!-- ══════════════════════ COPIA DESDE AQUÍ ══════════════════════ -->
+<style>
+/* Hero "Firma" · fondo transparente, se monta sobre el que ustedes ya tienen.
+   Todo va con prefijo .hf- para no chocar con tus estilos.                  */
+.hf{
+  --hf-champan:#E3BC72;
+  --hf-oro:#C08F2E;
+  --hf-humo:#F2F1EF;
+  --hf-tinta:#1C2440;
+
+  /* colores en uso — sobre fondo oscuro */
+  --hf-firma:var(--hf-champan);
+  --hf-texto:var(--hf-humo);
+  --hf-tenue:rgba(242,241,239,.62);
+  --hf-linea:rgba(227,188,114,.55);
+  --hf-brillo:0 0 34px rgba(227,188,114,.28);
+
+  background:transparent;
+  text-align:center;
+  font-family:'Jost',system-ui,sans-serif;
+  font-weight:300;
+  padding:8px;
+}
+/* variante para fondo claro (hueso, foto clara, papel) */
+.hf--claro{
+  --hf-firma:var(--hf-oro);
+  --hf-texto:var(--hf-tinta);
+  --hf-tenue:rgba(28,36,64,.6);
+  --hf-linea:rgba(192,143,46,.6);
+  --hf-brillo:none;
+}
+.hf *{box-sizing:border-box;margin:0;padding:0}
+
+.hf__sobre{
+  font-size:9.5px;
+  letter-spacing:.4em;
+  text-transform:uppercase;
+  color:var(--hf-firma);
+}
+
+.hf__nombres{
+  font-family:'Parisienne',cursive;
+  font-weight:400;
+  font-size:clamp(46px,13vw,86px);
+  line-height:1.05;
+  color:var(--hf-firma);
+  text-shadow:var(--hf-brillo);
+  margin:18px 0 6px;
+}
+
+.hf__fecha{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  margin-top:26px;
+  font-size:10px;
+  letter-spacing:.34em;
+  color:var(--hf-tenue);
+}
+.hf__fecha i{display:block;width:36px;height:1px;background:var(--hf-linea)}
+
+.hf__cuenta{
+  margin-top:34px;
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:16px;
+  letter-spacing:.06em;
+  color:var(--hf-tenue);
+}
+
+/* entrada al cargar */
+.hf__sobre,.hf__nombres,.hf__fecha,.hf__cuenta{
+  opacity:0;
+  transform:translateY(14px);
+  animation:hf-entra .9s cubic-bezier(.25,.8,.3,1) forwards;
+}
+.hf__nombres{animation-delay:.15s}
+.hf__fecha  {animation-delay:.45s}
+.hf__cuenta {animation-delay:.65s}
+@keyframes hf-entra{to{opacity:1;transform:translateY(0)}}
+
+@media (prefers-reduced-motion:reduce){
+  .hf__sobre,.hf__nombres,.hf__fecha,.hf__cuenta{animation:none;opacity:1;transform:none}
+}
+</style>
+
+<div class="hf">
+  <p class="hf__sobre">7 de noviembre de 2026</p>
+  <h1 class="hf__nombres">Dayona<br>y Javier</h1>
+  <p class="hf__fecha"><i></i>NOS CASAMOS<i></i></p>
+  <p class="hf__cuenta" data-hf-dias></p>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  /* misma fecha y misma zona horaria que el contador */
+  var BODA = new Date('2026-11-07T17:00:00-04:00');
+
+  document.querySelectorAll('[data-hf-dias]').forEach(function (el) {
+    var dias = Math.ceil((BODA - Date.now()) / 86400000);
+    el.textContent = dias > 1  ? 'Faltan ' + dias + ' días'
+                   : dias === 1 ? 'Falta 1 día'
+                   : dias === 0 ? 'Es hoy'
+                   : 'Gracias por acompañarnos';
+  });
+});
+</script>
+<!-- ══════════════════════ HASTA AQUÍ ══════════════════════ -->
+</section>
+
+<section class="prueba prueba--foto">
+  <span class="marca">Sobre foto</span>
+<div class="hf">
+  <p class="hf__sobre">7 de noviembre de 2026</p>
+  <h1 class="hf__nombres">Dayona<br>y Javier</h1>
+  <p class="hf__fecha"><i></i>NOS CASAMOS<i></i></p>
+  <p class="hf__cuenta" data-hf-dias></p>
+</div>
+</section>
+
+<section class="prueba prueba--claro">
+  <span class="marca">Sobre fondo claro · clase .hf--claro</span>
+<div class="hf hf--claro">
+  <p class="hf__sobre">7 de noviembre de 2026</p>
+  <h1 class="hf__nombres">Dayona<br>y Javier</h1>
+  <p class="hf__fecha"><i></i>NOS CASAMOS<i></i></p>
+  <p class="hf__cuenta" data-hf-dias></p>
+</div>
+</section>
+
+</body>
+</html>
