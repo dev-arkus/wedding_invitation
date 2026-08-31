@@ -109,7 +109,7 @@ export function Countdown({ target, initialRemaining, formattedDate, closingMess
      * las cifras.
      */
     <div data-sky-guard className="mx-auto max-w-md text-center">
-      <p className="font-body text-[0.8rem] font-light uppercase tracking-[0.42em] text-oro">
+      <p className="font-body text-[1.05rem] font-normal uppercase tracking-[0.3em] text-luz">
         Faltan
       </p>
 

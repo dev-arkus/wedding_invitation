@@ -20,8 +20,11 @@ import type { Photo } from '../lib/photos';
  * No hay que preparar la imagen: `next/image` la reescala y re-codifica, y el
  * color lo pone el filtro. Sueltan el JPG y ya.
  *
- * Los degradados de arriba y abajo son el difuminado que pidieron conservar: la
- * imagen no termina en un borde, se disuelve en la noche.
+ * Arriba y abajo la recorta una onda, no un degradado. Y se RECORTA de verdad
+ * (`clip-path`), no se tapa con una forma rellena: una forma opaca apagaba las
+ * estrellas en esa franja y dejaba una costura contra las secciones vecinas,
+ * que son transparentes. Recortando, el cielo se ve arriba y abajo como en
+ * cualquier otro sitio.
  *
  * El alto va en `vh` y no en proporción fija a propósito: la foto de origen es
  * muy vertical (591×1280), y forzarla a un 16:10 apaisado la recortaría a una
@@ -32,7 +35,7 @@ export function CouplePhoto({ photo }: { photo: Photo | null }) {
   if (!photo) return null;
 
   return (
-    <section className="relative h-[78vh] w-full sm:h-[88vh]">
+    <section className="relative h-[78vh] w-full [clip-path:url(#onda-foto)] sm:h-[88vh]">
       <Image
         src={photo.src}
         alt={photo.alt}
@@ -45,14 +48,6 @@ export function CouplePhoto({ photo }: { photo: Photo | null }) {
         loading="lazy"
       />
 
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-1/5 bg-gradient-to-b from-noche to-transparent"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/5 bg-gradient-to-t from-noche to-transparent"
-      />
     </section>
   );
 }

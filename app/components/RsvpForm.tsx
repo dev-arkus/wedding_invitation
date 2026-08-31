@@ -89,10 +89,10 @@ export function RsvpForm({ token, guests }: RsvpFormProps) {
 
   return (
     <form onSubmit={submit} noValidate>
-      <p className="font-body text-base font-light leading-relaxed text-navy/80">
+      <p className="font-body text-base font-light leading-relaxed text-hueso/85">
         {copy.rsvp.intro(guests.length)}
       </p>
-      <p className="mt-1 font-body text-base font-light leading-relaxed text-navy/80">
+      <p className="mt-1 font-body text-base font-light leading-relaxed text-hueso/85">
         {copy.rsvp.instruction(guests.length)}
       </p>
 
@@ -112,19 +112,19 @@ export function RsvpForm({ token, guests }: RsvpFormProps) {
 
       {/* `aria-live` para que un lector de pantalla anuncie el fallo sin que el
           invitado tenga que ir a buscarlo. */}
-      <p role="status" aria-live="polite" className="mt-6 min-h-[1.5rem] font-body text-sm text-oro-tinta">
+      <p role="status" aria-live="polite" className="mt-6 min-h-[1.5rem] font-body text-sm text-luz">
         {error}
       </p>
 
       <button
         type="submit"
         disabled={saving}
-        className="mt-2 min-h-[44px] w-full rounded-sm border border-oro-tinta bg-transparent px-6 py-3 font-body text-sm uppercase tracking-eyebrow text-oro-tinta transition-colors hover:bg-oro-tinta hover:text-hueso disabled:opacity-50"
+        className="mt-2 min-h-[44px] w-full rounded-sm border border-luz bg-transparent px-6 py-3 font-body text-sm uppercase tracking-eyebrow text-luz transition-colors hover:bg-luz hover:text-noche disabled:opacity-50"
       >
         {saving ? 'Guardando…' : copy.rsvp.submit}
       </button>
 
-      <p className="mt-6 font-body text-xs font-light leading-relaxed text-navy/60">
+      <p className="mt-6 font-body text-xs font-light leading-relaxed text-hueso/65">
         {copy.rsvp.editable}
       </p>
     </form>
@@ -151,7 +151,7 @@ function Confirmed({ attending, total }: { attending: string[]; total: number })
 
       <p className="mt-6 font-display text-[clamp(1.5rem,7vw,2rem)] leading-snug">{message}</p>
 
-      <p className="mt-6 font-body text-xs font-light leading-relaxed text-navy/60">
+      <p className="mt-6 font-body text-xs font-light leading-relaxed text-hueso/65">
         {copy.rsvp.editable}
       </p>
     </div>
@@ -170,7 +170,7 @@ function StarSpark() {
     >
       <path
         d="M16 2 Q17.4 14.6 30 16 Q17.4 17.4 16 30 Q14.6 17.4 2 16 Q14.6 14.6 16 2 Z"
-        fill="var(--oro-tinta)"
+        fill="var(--luz)"
       />
     </svg>
   );

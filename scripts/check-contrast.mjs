@@ -63,7 +63,7 @@ const CHECKS = [
 
   // Paneles claros: el dorado normal no sirve aquí, por eso existe --oro-tinta.
   ['navy sobre hueso', tokens.navy, tokens.hueso, 4.5, 'texto en panel claro'],
-  ['navy 70% sobre hueso', over(tokens.navy, tokens.hueso, 0.7), tokens.hueso, 4.5, 'secundario en panel claro'],
+  ['navy 85% sobre hueso', over(tokens.navy, tokens.hueso, 0.85), tokens.hueso, 4.5, 'texto en sección clara'],
   ['oro-tinta sobre hueso', tokens['oro-tinta'], tokens.hueso, 4.5, 'acentos en panel claro'],
   ['hueso sobre oro-tinta', tokens.hueso, tokens['oro-tinta'], 4.5, 'botón lleno en panel claro'],
 ];

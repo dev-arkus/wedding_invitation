@@ -43,6 +43,24 @@ export const copy = {
 
   dressCode: {
     title: 'Cómo vestirte',
+    /** Se usa si `dress_code` está vacío en la pestaña Config. */
+    nivelPorDefecto: 'Etiqueta formal',
+    glosa: 'Vestido largo y traje oscuro. Es una boda de noche y queremos vernos así en las fotos.',
+    ellos: { titulo: 'Ellos', texto: 'Esmoquin o traje oscuro, con corbata o corbatín.' },
+    ellas: { titulo: 'Ellas', texto: 'Vestido largo, en el tono que prefieras.' },
+    /**
+     * La única restricción. Se dice qué evitar, no qué ponerse: es lo que el
+     * invitado necesita saber, y es más corto que enumerar una paleta.
+     */
+    reserva: 'Solo dos colores quedan apartados: el blanco y el verde oliva son los nuestros esa noche.',
+    referencias: {
+      titulo: '¿Qué me pongo?',
+      nota: 'Son solo ideas para orientarte. Si ya tienes algo que te encanta, ese es el vestuario correcto.',
+    },
+    practico: [
+      'Ven con calzado con el que puedas bailar.',
+      'Refresca de madrugada: un chal o un saco no sobra.',
+    ],
   },
 
   rsvp: {

@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import { formatTime } from '../lib/time';
 import { CopyableAddress, DirectionsButton, type Venue } from './VenueParts';
+import { ZoomablePhoto } from './ZoomablePhoto';
 import type { Photo } from '../lib/photos';
 
 /**
@@ -34,17 +34,17 @@ export function MisaSection({
       >
         {photo && (
           <div className="relative h-[clamp(250px,52vw,340px)] w-full">
-            <Image
-              src={photo.src}
-              alt={photo.alt}
-              fill
+            <ZoomablePhoto
+              photo={photo}
+              className="h-full"
               sizes="(max-width: 640px) 100vw, 480px"
-              className="bg-navy object-cover object-[center_45%] [filter:url(#duotono-suave)]"
+              imageClassName="bg-navy object-cover object-[center_45%] [filter:url(#duotono-suave)]"
             />
-            {/* Funde la parte baja de la foto con el panel. */}
+            {/* Funde la parte baja de la foto con el panel. `pointer-events-none`
+                para que no se coma el toque que abre la foto en grande. */}
             <div
               aria-hidden="true"
-              className="absolute inset-0 bg-gradient-to-b from-transparent from-[58%] to-navy"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent from-[58%] to-navy"
             />
           </div>
         )}

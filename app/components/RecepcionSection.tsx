@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import { formatTime } from '../lib/time';
 import { CopyableAddress, DirectionsButton, type Venue } from './VenueParts';
+import { ZoomablePhoto } from './ZoomablePhoto';
 import type { Photo } from '../lib/photos';
 
 /**
@@ -45,16 +45,15 @@ export function RecepcionSection({
       >
         {photo ? (
           <div className="relative aspect-[4/3] w-full">
-            <Image
-              src={photo.src}
-              alt={photo.alt}
-              fill
+            <ZoomablePhoto
+              photo={photo}
+              className="h-full"
               sizes="(max-width: 640px) 100vw, 480px"
-              className="bg-navy object-cover object-[center_45%] [filter:url(#duotono-suave)]"
+              imageClassName="bg-navy object-cover object-[center_45%] [filter:url(#duotono-suave)]"
             />
             <div
               aria-hidden="true"
-              className="absolute inset-0 bg-gradient-to-b from-navy/10 to-navy/55"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-b from-navy/10 to-navy/55"
             />
           </div>
         ) : null}

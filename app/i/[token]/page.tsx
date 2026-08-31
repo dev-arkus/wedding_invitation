@@ -11,7 +11,7 @@ import { DataUnavailable } from '../../components/DataUnavailable';
 import { DressCode } from '../../components/DressCode';
 import { RsvpForm } from '../../components/RsvpForm';
 import { RsvpReadOnly } from '../../components/RsvpReadOnly';
-import { Panel, Rule } from '../../components/Panel';
+import { Rule } from '../../components/Panel';
 
 import { getConfig, getInvitation, checkScheduleCoherence } from '../../lib/registry';
 import { SheetsError, explainSheetsError } from '../../lib/google/sheets';
@@ -27,10 +27,16 @@ import { copy } from '../../lib/copy';
  * planner se ve de inmediato. Con ~30 invitaciones abiertas unas pocas veces al
  * año no hay nada que valga la pena cachear.
  *
- * ── El ritmo claro/oscuro ────────────────────────────────────────────────────
- * Hero, contador, misa y recepción van oscuros: son la atmósfera, y el cielo
- * tiene que verse. Dress code y confirmación van claros: son donde el invitado
- * ACTÚA, y una superficie crema les da el mejor contraste de la página.
+ * ── El ritmo de la página ────────────────────────────────────────────────────
+ * Alternan tres tratamientos, y cada uno responde a lo que hace la sección:
+ *
+ *   franjas    contador y confirmación van a sangre, sin fondo y sin esquinas.
+ *              Cortan la página y dejan ver el cielo entero.
+ *   tarjetas   misa y recepción van en panel oscuro con filete. Son bloques de
+ *              información que se consultan.
+ *   crema      el dress code, y solo el dress code. Es la única sección que
+ *              rompe la noche, y por eso destaca: es la que más gente va a
+ *              buscar a propósito.
  */
 export const dynamic = 'force-dynamic';
 
@@ -92,8 +98,11 @@ export default async function InvitationPage({ params }: PageProps) {
 
         {/* El contador va a sangre, sin esquinas y SIN FONDO: el cielo se ve a
             través. La legibilidad la sostiene el guardarraíl del propio bloque de
-            texto, no un panel que tape las estrellas. */}
-        <section className="border-y border-oro/25 px-5 py-16">
+            texto, no un panel que tape las estrellas.
+
+            Sin filete arriba: la foto de encima ya termina en onda, y una recta
+            justo debajo de una curva delataba que son dos piezas distintas. */}
+        <section className="border-b border-oro/25 px-5 py-16">
           <Countdown
             target={config.misaAt}
             initialRemaining={remaining}
@@ -119,12 +128,23 @@ export default async function InvitationPage({ params }: PageProps) {
         />
 
         {/* Sin dress code definido la sección desaparece entera. */}
-        <DressCode value={config.dressCode} />
+        <DressCode
+          nivel={config.dressCode || copy.dressCode.nivelPorDefecto}
+          glosa={config.dressCodeGlosa}
+          reserva={config.dressCodeReserva}
+        />
 
-        <div className="px-5 pb-28 pt-8">
-          <Panel tone="claro">
+        {/* La confirmación va a sangre y sin fondo, igual que el contador: el
+            cielo se ve a través. El `data-sky-guard` se acota al bloque de
+            contenido —no a la sección entera— para que las estrellas solo se
+            atenúen detrás del texto y no queden apagadas de lado a lado.
+
+            Es la sección más exigente en legibilidad de toda la invitación:
+            aquí no se lee, se decide. */}
+        <section className="border-t border-oro/25 px-5 pb-28 pt-16">
+          <div data-sky-guard className="mx-auto max-w-md">
             <h2 className="font-display text-[clamp(1.9rem,9vw,2.6rem)]">{copy.rsvp.title}</h2>
-            <Rule tone="claro" className="mt-5" />
+            <Rule className="mt-5" />
 
             <div className="mt-7">
               {closed ? (
@@ -133,8 +153,8 @@ export default async function InvitationPage({ params }: PageProps) {
                 <RsvpForm token={invitation.token} guests={invitation.guests} />
               )}
             </div>
-          </Panel>
-        </div>
+          </div>
+        </section>
       </main>
     </>
   );

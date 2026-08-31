@@ -41,13 +41,22 @@ export function Hero({ daysAway }: { daysAway: number }) {
         <i className="block h-px w-9 bg-oro/60" />
       </p>
 
-      <p className="mt-8 font-display text-lg tracking-wide text-hueso/60 motion-safe:animate-[sube_900ms_cubic-bezier(.25,.8,.3,1)_650ms_both]">
+      {/*
+        En Jost y no en Italiana: a este tamaño la romana de trazo fino se
+        deshace. Italiana solo de 24px para arriba.
+
+        Y la redacción cambia. «Faltan N días» repetía palabra por palabra lo
+        que dice el contador un poco más abajo, y en una frase suelta no queda
+        claro qué falta. «Nos vemos en N días» lo dice en activo, sin repetir, y
+        con el mismo «tú» del resto de la invitación.
+      */}
+      <p className="mt-8 font-body text-[1.05rem] font-light tracking-[0.06em] text-hueso/85 motion-safe:animate-[sube_900ms_cubic-bezier(.25,.8,.3,1)_650ms_both]">
         {daysAway > 1
-          ? `Faltan ${daysAway} días`
+          ? `Nos vemos en ${daysAway} días`
           : daysAway === 1
-            ? 'Falta 1 día'
+            ? 'Nos vemos mañana'
             : daysAway === 0
-              ? 'Es hoy'
+              ? 'Nos vemos hoy'
               : 'Gracias por acompañarnos'}
       </p>
     </div>

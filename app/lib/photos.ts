@@ -67,6 +67,26 @@ export const venuePhoto: Photo | null = {
  };
 
 /**
+ * Fotos de referencia del dress code.
+ *
+ * Se muestran dentro del desplegable «¿Qué me pongo?». Si la lista está vacía,
+ * ese desplegable no aparece: una sección plegable con una sola línea de texto
+ * dentro no vale el clic.
+ *
+ * Van en `public/fotos/` igual que las demás, en vertical.
+ *
+ * Para agregar o quitar una, se edita esta lista — no hay que descomentar nada.
+ * Y conviene cambiar los `alt` por lo que se ve de verdad en cada foto
+ * («vestido largo azul», «traje oscuro con corbatín»): es lo único que oye
+ * alguien que use lector de pantalla.
+ */
+export const dressCodeRefs: Photo[] = [
+  { src: '/fotos/dress-1.jpg', alt: 'Referencia de vestuario 1' },
+  { src: '/fotos/dress-2.jpg', alt: 'Referencia de vestuario 2' },
+  { src: '/fotos/dress-3.jpg', alt: 'Referencia de vestuario 3' },
+];
+
+/**
  * Música de fondo. `null` = no se muestra el botón.
  *
  * Si la canción es comercial y se aloja aquí, es técnicamente una infracción.

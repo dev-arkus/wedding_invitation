@@ -167,6 +167,10 @@ export interface WeddingConfig {
   misa: PlaceConfig;
   recepcion: PlaceConfig;
   dressCode: string;
+  /** Frase explicativa bajo el nivel. Vacía = se usa la de `copy`. */
+  dressCodeGlosa: string;
+  /** Los colores reservados. Vacía = se usa la de `copy`. */
+  dressCodeReserva: string;
   closingMessage: string;
 }
 
@@ -233,6 +237,8 @@ export async function getConfig(): Promise<WeddingConfig> {
       placeId: get('recepcion_place_id'),
     },
     dressCode: get('dress_code'),
+    dressCodeGlosa: get('dress_code_glosa'),
+    dressCodeReserva: get('dress_code_reserva'),
     closingMessage: get('mensaje_cierre'),
   };
 }
