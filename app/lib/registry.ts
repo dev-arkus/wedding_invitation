@@ -244,6 +244,34 @@ export async function getConfig(): Promise<WeddingConfig> {
 }
 
 /**
+ * Fecha y hora en el formato NUMÉRICO de Google Sheets.
+ *
+ * Al escribir `2026-11-07 18:00` en una celda, Sheets no guarda texto: lo
+ * reconoce como fecha y guarda un número —días desde el 30/12/1899, con la
+ * fracción como hora del día—. La API con `UNFORMATTED_VALUE` devuelve ese
+ * número, así que la pareja escribía la hora correcta y la aplicación la
+ * descartaba por «inválida» sin que nadie lo notara.
+ *
+ * Se aceptan las dos formas: texto `YYYY-MM-DD HH:mm` y serial. El serial se
+ * interpreta como hora de pared de Caracas, igual que el texto.
+ */
+function parseSheetsSerial(raw: string): number | null {
+  const n = Number(raw);
+  // Un rango sensato: 1990 a 2100. Fuera de ahí no es una fecha, es un dedazo.
+  if (!Number.isFinite(n) || n < 32874 || n > 73415) return null;
+
+  const ms = Date.UTC(1899, 11, 30) + n * 86_400_000;
+  const d = new Date(Math.round(ms / 60_000) * 60_000); // al minuto más cercano
+
+  const pad = (v: number) => String(v).padStart(2, '0');
+  const wall =
+    `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())} ` +
+    `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
+
+  return parseWallTime(wall);
+}
+
+/**
  * Interpreta una hora de pared de la pestaña `Config` como hora de Caracas.
  *
  * Si la celda está vacía o no parsea, se usa el instante de entorno y se
@@ -252,7 +280,7 @@ export async function getConfig(): Promise<WeddingConfig> {
 function resolveInstant(wall: string, fallback: number, key: string): number {
   if (!wall) return fallback;
 
-  const parsed = parseWallTime(wall);
+  const parsed = parseWallTime(wall) ?? parseSheetsSerial(wall);
   if (parsed === null) {
     console.warn(
       `[config] ${key} = ${JSON.stringify(wall)} no es una hora válida ` +
