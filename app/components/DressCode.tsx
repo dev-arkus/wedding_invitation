@@ -15,7 +15,6 @@ import { dressCodeRefs } from '../lib/photos';
  *   3. ¿y en concreto?       las dos siluetas
  *   4. ¿hay algo prohibido?  la reserva de colores
  *   5. ¿me das ejemplos?     el desplegable
- *   6. ¿algo más?            las notas prácticas
  *
  * Lo que se cayó respecto a la versión anterior fueron las muestras de la
  * paleta. Decirle a alguien **qué evitar** —blanco y verde oliva— es lo que de
@@ -74,16 +73,6 @@ export function DressCode({
           />
         )}
 
-        <ul className="mt-8 flex flex-wrap justify-center gap-x-[clamp(1.25rem,5vw,2.5rem)] gap-y-4">
-          {c.practico.map((nota, i) => (
-            <li key={nota} className="flex max-w-[24ch] items-start gap-2.5 text-left">
-              <span className="mt-0.5 shrink-0 text-oro-tinta">
-                {i === 0 ? <IconoZapato /> : <IconoLuna />}
-              </span>
-              <p className="font-body text-[0.95rem] font-normal leading-snug text-navy/85">{nota}</p>
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   );
@@ -128,23 +117,5 @@ function Silueta({ titulo, texto, tipo }: { titulo: string; texto: string; tipo:
       <h3 className="mb-2 font-display text-[1.65rem] leading-tight">{titulo}</h3>
       <p className="font-body text-[1rem] font-normal leading-relaxed text-navy/85">{texto}</p>
     </div>
-  );
-}
-
-function IconoZapato() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" className="fill-none stroke-current stroke-[1.4] [stroke-linecap:round] [stroke-linejoin:round]">
-      <path d="M9 18V6l10-2v12" />
-      <circle cx="6.5" cy="18" r="2.5" />
-      <circle cx="16.5" cy="16" r="2.5" />
-    </svg>
-  );
-}
-
-function IconoLuna() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" className="fill-none stroke-current stroke-[1.4] [stroke-linecap:round] [stroke-linejoin:round]">
-      <path d="M17 14a7 7 0 1 1-7-10 6 6 0 0 0 7 10Z" />
-    </svg>
   );
 }

@@ -9,8 +9,14 @@ import { Parisienne, Italiana, Jost } from 'next/font/google';
  * plantilla, pero como firma única funciona — porque eso es, una firma.
  *
  * ── Italiana · títulos y nombres de lugar ────────────────────────────────────
- * Romana de trazo fino y aire art déco. Solo se usa de 24px para arriba; por
- * debajo de eso volvería el problema que tuvimos con Bodoni.
+ * Romana de trazo fino y aire art déco. Dos reglas, y las dos salieron de
+ * quejas reales de legibilidad:
+ *
+ *   1. nunca por debajo de 24px
+ *   2. nunca en texto que alguien lee para DECIDIR algo
+ *
+ * La segunda es la que más cuesta recordar: un nombre de invitado puede ir a
+ * 25px y aun así estar mal en Italiana, porque no se contempla — se usa.
  *
  * ── Jost · todo lo demás ─────────────────────────────────────────────────────
  * Texto corrido, etiquetas, botones y las cifras del contador. Geométrica de

@@ -11,7 +11,6 @@ import { DataUnavailable } from '../../components/DataUnavailable';
 import { DressCode } from '../../components/DressCode';
 import { RsvpForm } from '../../components/RsvpForm';
 import { RsvpReadOnly } from '../../components/RsvpReadOnly';
-import { Rule } from '../../components/Panel';
 
 import { getConfig, getInvitation, checkScheduleCoherence } from '../../lib/registry';
 import { SheetsError, explainSheetsError } from '../../lib/google/sheets';
@@ -143,16 +142,11 @@ export default async function InvitationPage({ params }: PageProps) {
             aquí no se lee, se decide. */}
         <section className="border-t border-oro/25 px-5 pb-28 pt-16">
           <div data-sky-guard className="mx-auto max-w-md">
-            <h2 className="font-display text-[clamp(1.9rem,9vw,2.6rem)]">{copy.rsvp.title}</h2>
-            <Rule className="mt-5" />
-
-            <div className="mt-7">
-              {closed ? (
-                <RsvpReadOnly guests={invitation.guests} />
-              ) : (
-                <RsvpForm token={invitation.token} guests={invitation.guests} />
-              )}
-            </div>
+            {closed ? (
+              <RsvpReadOnly guests={invitation.guests} />
+            ) : (
+              <RsvpForm token={invitation.token} guests={invitation.guests} />
+            )}
           </div>
         </section>
       </main>

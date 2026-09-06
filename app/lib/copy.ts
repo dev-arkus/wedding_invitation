@@ -45,32 +45,49 @@ export const copy = {
     title: 'Cómo vestirte',
     /** Se usa si `dress_code` está vacío en la pestaña Config. */
     nivelPorDefecto: 'Etiqueta formal',
-    glosa: 'Vestido largo y traje oscuro. Es una boda de noche y queremos vernos así en las fotos.',
-    ellos: { titulo: 'Ellos', texto: 'Esmoquin o traje oscuro, con corbata o corbatín.' },
+    glosa: 'Vestido largo y traje.',
+    ellos: { titulo: 'Ellos', texto: 'Esmoquin o traje, con corbata o corbatín.' },
     ellas: { titulo: 'Ellas', texto: 'Vestido largo, en el tono que prefieras.' },
     /**
      * La única restricción. Se dice qué evitar, no qué ponerse: es lo que el
      * invitado necesita saber, y es más corto que enumerar una paleta.
      */
-    reserva: 'Solo dos colores quedan apartados: el blanco y el verde oliva son los nuestros esa noche.',
+    reserva: 'Evitar color verde oliva y blanco, o tonos que se asemejen.',
     referencias: {
       titulo: '¿Qué me pongo?',
       nota: 'Son solo ideas para orientarte. Si ya tienes algo que te encanta, ese es el vestuario correcto.',
     },
-    practico: [
-      'Ven con calzado con el que puedas bailar.',
-      'Refresca de madrugada: un chal o un saco no sobra.',
-    ],
   },
 
   rsvp: {
     title: '¿Nos acompañas?',
+    /** Epígrafe sobre el conteo de pases. */
+    epigrafe: 'Tu invitación incluye',
+    /**
+     * El titular es el número de pases, no el nombre del grupo.
+     *
+     * Es la pieza de copy que más trabajo hace de toda la invitación: dice de
+     * entrada cuántos lugares hay, así que la regla —los nombres vienen puestos
+     * y no se puede sumar gente— queda dicha sin tener que explicarla.
+     */
+    pases: (n: number) => (n === 1 ? '1 pase' : `${n} pases`),
+    ayuda: (n: number) =>
+      n === 1
+        ? 'Marca si puedes acompañarnos el sábado 7 de noviembre.'
+        : 'Marca quién puede acompañarnos el sábado 7 de noviembre.',
     /** El servidor sabe cuántos son; el texto se ajusta solo. */
     intro: (guestCount: number) =>
       guestCount === 1 ? 'Apartamos un lugar para ti.' : 'Apartamos estos lugares para ti.',
     instruction: (guestCount: number) =>
       guestCount === 1 ? 'Marca si puedes venir.' : 'Marca quién puede venir.',
-    submit: 'Confirmar',
+    submit: 'Guardar mi respuesta',
+    /**
+     * Resumen del pie. Solo aparece cuando ya no falta nadie por marcar:
+     * contar a medias distrae más de lo que informa.
+     */
+    resumenNinguno: 'Ninguno podrá asistir',
+    resumenTodos: (total: number) => (total === 1 ? 'Confirmado' : `Asisten los ${total}`),
+    resumenParcial: (van: number, total: number) => `Asisten ${van} de ${total}`,
     editable: 'Puedes cambiar tu respuesta hasta el 31 de octubre.',
   },
 

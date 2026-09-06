@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirmación de asistencia · Dayona y Javier</title>
+
+<!-- Si tu invitación ya carga fuentes, quita este link -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Italiana&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* solo para esta página de prueba */
+  body{margin:0;background:#0C1124;padding:40px 16px}
+  .contenedor{max-width:560px;margin:0 auto}
+</style>
+</head>
+<body>
+<div class="contenedor">
+
+<!-- ══════════════════════ COPIA DESDE AQUÍ ══════════════════════ -->
+<style>
+/* Confirmación de asistencia · prefijo .pase- */
+.pase{
+  --pase-tinta:#1C2440;
+  --pase-oro:#B4832A;
+  --pase-champan:#E3BC72;
+  --pase-papel:#FBFAF8;
+  --pase-linea:#E4E0D8;
+  --pase-gris:#5A6079;
+
+  background:var(--pase-papel);
+  color:var(--pase-tinta);
+  font-family:'Jost',system-ui,sans-serif;
+  font-weight:400;
+  padding:44px clamp(18px,5vw,36px) 46px;
+  border-radius:4px;
+}
+.pase *{box-sizing:border-box;margin:0;padding:0}
+
+/* ── encabezado ── */
+.pase__cabeza{text-align:center;margin-bottom:34px}
+.pase__adorno{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:18px}
+.pase__adorno i{display:block;width:48px;height:1px;background:var(--pase-oro);opacity:.6}
+.pase__adorno b{display:block;width:6px;height:6px;background:var(--pase-oro);transform:rotate(45deg)}
+.pase__epigrafe{
+  font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:400;
+  font-size:19px;color:var(--pase-oro);
+}
+.pase__titulo{
+  font-family:'Italiana',Georgia,serif;font-weight:400;
+  font-size:clamp(27px,6.4vw,36px);letter-spacing:.02em;line-height:1.25;
+  margin:10px 0 16px;
+}
+.pase__ayuda{font-size:17px;line-height:1.7;color:var(--pase-gris);max-width:400px;margin:0 auto}
+
+/* ── tarjeta de cada invitado ── */
+.pase__lista{display:grid;gap:14px;margin-top:30px}
+.pase__persona{
+  background:#fff;
+  border:1px solid var(--pase-linea);
+  border-left:3px solid var(--pase-linea);
+  border-radius:5px;
+  padding:22px 20px;
+  display:grid;grid-template-columns:58px 1fr;gap:16px;align-items:start;
+  transition:border-color .22s,background .22s,opacity .22s;
+}
+.pase__persona[data-estado="si"]{border-left-color:var(--pase-oro);background:#FFFDF8}
+.pase__persona[data-estado="no"]{border-left-color:var(--pase-tinta);opacity:.72}
+.pase__persona[data-aviso]{border-color:var(--pase-champan);box-shadow:0 0 0 3px rgba(227,188,114,.35)}
+
+.pase__letra{
+  width:58px;height:58px;border-radius:50%;
+  background:var(--pase-tinta);color:var(--pase-champan);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:27px;
+  box-shadow:0 0 0 1px var(--pase-papel),0 0 0 2px rgba(180,131,42,.45);
+  transition:background .22s,color .22s;
+}
+.pase__persona[data-estado="si"] .pase__letra{background:var(--pase-oro);color:#fff}
+
+.pase__datos{min-width:0}
+.pase__nombre{
+  font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;
+  font-size:25px;line-height:1.25;
+}
+.pase__nota{font-size:15px;color:var(--pase-gris);margin-top:3px}
+
+.pase__par{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.pase__op{
+  min-height:60px;padding:14px 10px;
+  border:2px solid #D4D0C7;border-radius:4px;background:#fff;
+  color:var(--pase-tinta);font-family:'Jost',sans-serif;font-size:17px;font-weight:500;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;
+  transition:background .18s,border-color .18s,color .18s;
+}
+.pase__op:hover{border-color:var(--pase-oro)}
+.pase__op svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.4;flex:0 0 auto;opacity:0;transition:opacity .18s}
+.pase__op[aria-pressed="true"] svg{opacity:1}
+.pase__op[data-si][aria-pressed="true"]{background:var(--pase-oro);border-color:var(--pase-oro);color:#fff}
+.pase__op[data-no][aria-pressed="true"]{background:var(--pase-tinta);border-color:var(--pase-tinta);color:#fff}
+
+/* ── pie ── */
+.pase__pie{margin-top:30px;text-align:center}
+.pase__resumen{
+  font-family:'Cormorant Garamond',Georgia,serif;font-size:19px;
+  color:var(--pase-gris);min-height:26px;margin-bottom:16px;
+}
+.pase__guardar{
+  width:100%;max-width:420px;min-height:64px;
+  border:none;border-radius:4px;background:var(--pase-tinta);color:#fff;
+  font-family:'Jost',sans-serif;font-size:19px;font-weight:500;cursor:pointer;
+  transition:background .2s;
+}
+.pase__guardar:hover{background:#2A3560}
+
+/* ── estado guardado ── */
+.pase__listo{display:none;text-align:center;padding:26px 0 10px}
+.pase__sello{
+  width:64px;height:64px;border-radius:50%;margin:0 auto 20px;
+  background:var(--pase-oro);display:flex;align-items:center;justify-content:center;
+}
+.pase__sello svg{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:2.4}
+.pase__listo b{display:block;font-family:'Italiana',Georgia,serif;font-weight:400;font-size:30px;margin-bottom:12px}
+.pase__listo p{font-size:17px;line-height:1.75;color:var(--pase-gris);max-width:400px;margin:0 auto}
+.pase__listo button{
+  margin-top:24px;min-height:52px;padding:0 28px;
+  border:2px solid #D4D0C7;border-radius:4px;background:#fff;color:var(--pase-tinta);
+  font-family:'Jost',sans-serif;font-size:16px;font-weight:500;cursor:pointer;
+}
+.pase--guardado .pase__listo{display:block}
+.pase--guardado .pase__lista,
+.pase--guardado .pase__pie,
+.pase--guardado .pase__ayuda{display:none}
+
+@media (max-width:430px){
+  .pase__persona{grid-template-columns:48px 1fr;gap:13px;padding:20px 16px}
+  .pase__letra{width:48px;height:48px;font-size:23px}
+  .pase__par{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.pase *{transition:none!important}}
+</style>
+
+<section class="pase" id="pase">
+  <div class="pase__cabeza">
+    <div class="pase__adorno"><i></i><b></b><i></i></div>
+    <p class="pase__epigrafe">Nos encantaría verlos</p>
+    <h2 class="pase__titulo" id="paseTitulo"></h2>
+    <p class="pase__ayuda">Marque quién puede acompañarnos el sábado 7 de noviembre.</p>
+  </div>
+
+  <div class="pase__lista" id="paseLista"></div>
+
+  <div class="pase__pie">
+    <p class="pase__resumen" id="paseResumen"></p>
+    <button class="pase__guardar" id="paseGuardar">Guardar mi respuesta</button>
+  </div>
+
+  <div class="pase__listo">
+    <div class="pase__sello"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+    <b>¡Gracias!</b>
+    <p id="paseGracias"></p>
+    <button id="paseEditar">Cambiar mi respuesta</button>
+  </div>
+</section>
+
+<script>
+(function () {
+  /* ═══════ ESTO LO ARMAS TÚ CON EL TOKEN DEL INVITADO ═══════ */
+  var PASE = {
+    titulo: 'Familia Rodríguez Pérez',
+    invitados: [
+      { id: 'p1', nombre: 'Carlos Rodríguez',         nota: 'Adulto' },
+      { id: 'p2', nombre: 'María Pérez de Rodríguez', nota: 'Adulto' },
+      { id: 'p3', nombre: 'Sofía Rodríguez',          nota: 'Niña' }
+    ]
+  };
+  /* ═════════════════════════════════════════════════════════ */
+
+  var CHECK = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
+  var EQUIS = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+
+  var raiz    = document.getElementById('pase');
+  var lista   = document.getElementById('paseLista');
+  var resumen = document.getElementById('paseResumen');
+  var estado  = {};
+
+  document.getElementById('paseTitulo').textContent = PASE.titulo;
+
+  PASE.invitados.forEach(function (p) {
+    estado[p.id] = null;
+    lista.insertAdjacentHTML('beforeend',
+      '<div class="pase__persona" data-invitado="' + p.id + '">' +
+        '<div class="pase__letra">' + p.nombre.charAt(0) + '</div>' +
+        '<div class="pase__datos">' +
+          '<div class="pase__nombre">' + p.nombre + '</div>' +
+          (p.nota ? '<div class="pase__nota">' + p.nota + '</div>' : '') +
+          '<div class="pase__par">' +
+            '<button class="pase__op" data-si aria-pressed="false">' + CHECK + 'Sí asiste</button>' +
+            '<button class="pase__op" data-no aria-pressed="false">' + EQUIS + 'No podrá</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>');
+  });
+
+  function refrescar() {
+    var faltan = PASE.invitados.filter(function (p) { return estado[p.id] === null; }).length;
+    var van    = PASE.invitados.filter(function (p) { return estado[p.id] === 'si'; }).length;
+    var total  = PASE.invitados.length;
+
+    if (faltan) { resumen.textContent = ''; return; }   // sin mensajes hasta terminar
+    resumen.textContent = van === 0        ? 'Ninguno podrá asistir'
+                        : van === total    ? (total === 1 ? 'Confirmado' : 'Asisten los ' + total)
+                        : 'Asisten ' + van + ' de ' + total;
+  }
+
+  lista.addEventListener('click', function (e) {
+    var op = e.target.closest('[data-si],[data-no]');
+    if (!op) return;
+    var fila = op.closest('[data-invitado]');
+    var valor = op.hasAttribute('data-si') ? 'si' : 'no';
+
+    estado[fila.dataset.invitado] = valor;
+    fila.dataset.estado = valor;
+    fila.removeAttribute('data-aviso');
+    fila.querySelectorAll('[data-si],[data-no]').forEach(function (b) {
+      b.setAttribute('aria-pressed', (b.hasAttribute('data-si') ? 'si' : 'no') === valor);
+    });
+    refrescar();
+  });
+
+  document.getElementById('paseGuardar').addEventListener('click', function () {
+    /* si algo quedó sin responder, señalamos la tarjeta en vez de regañar con texto */
+    var pendiente = PASE.invitados.filter(function (p) { return estado[p.id] === null; });
+    if (pendiente.length) {
+      pendiente.forEach(function (p) {
+        lista.querySelector('[data-invitado="' + p.id + '"]').setAttribute('data-aviso', '');
+      });
+      var primera = lista.querySelector('[data-invitado="' + pendiente[0].id + '"]');
+      primera.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    var van = PASE.invitados.filter(function (p) { return estado[p.id] === 'si'; });
+    document.getElementById('paseGracias').textContent = van.length
+      ? 'Los esperamos el sábado 7 de noviembre: ' +
+        van.map(function (p) { return p.nombre.split(' ')[0]; }).join(', ') + '.'
+      : 'Gracias por avisarnos. Los vamos a extrañar.';
+    raiz.classList.add('pase--guardado');
+
+    /* aquí va el envío a tu Apps Script, con el token y el objeto estado
+       fetch(URL, { method:'POST', body: JSON.stringify({ token: TOKEN, respuestas: estado }) }); */
+  });
+
+  document.getElementById('paseEditar').addEventListener('click', function () {
+    raiz.classList.remove('pase--guardado');
+  });
+
+  refrescar();
+})();
+</script>
+<!-- ══════════════════════ HASTA AQUÍ ══════════════════════ -->
+
+</div>
+</body>
+</html>
