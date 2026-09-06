@@ -67,13 +67,25 @@ export const venuePhoto: Photo | null = {
  };
 
 /**
+ * La foto de cierre, recortada sin fondo (PNG con transparencia).
+ *
+ * Va sobre el disco de la sección «Los esperamos». Tiene que ser un recorte:
+ * una foto rectangular rompería el efecto de que están delante del círculo.
+ */
+export const closingPhoto: Photo | null = {
+  src: '/fotos/dayo-javi.png',
+  alt: 'Dayona y Javier',
+};
+
+/**
  * Fotos de referencia del dress code.
  *
  * Se muestran dentro del desplegable «¿Qué me pongo?». Si la lista está vacía,
  * ese desplegable no aparece: una sección plegable con una sola línea de texto
  * dentro no vale el clic.
  *
- * Van en `public/fotos/` igual que las demás, en vertical.
+ * Van en `public/fotos/` igual que las demás. Las actuales son cuadradas, y la
+ * celda de la rejilla también, así que no se recorta nada.
  *
  * Para agregar o quitar una, se edita esta lista — no hay que descomentar nada.
  * Y conviene cambiar los `alt` por lo que se ve de verdad en cada foto
@@ -81,9 +93,8 @@ export const venuePhoto: Photo | null = {
  * alguien que use lector de pantalla.
  */
 export const dressCodeRefs: Photo[] = [
-  { src: '/fotos/dress-1.jpg', alt: 'Referencia de vestuario 1' },
-  { src: '/fotos/dress-2.jpg', alt: 'Referencia de vestuario 2' },
-  { src: '/fotos/dress-3.jpg', alt: 'Referencia de vestuario 3' },
+  { src: '/fotos/dress-1.jpg', alt: 'Ilustración con tres opciones de traje formal para ellos' },
+  { src: '/fotos/dress-2.jpg', alt: 'Ilustración con cuatro opciones de vestido largo para ellas' },
 ];
 
 /**

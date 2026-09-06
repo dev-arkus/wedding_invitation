@@ -11,10 +11,11 @@ import { DataUnavailable } from '../../components/DataUnavailable';
 import { DressCode } from '../../components/DressCode';
 import { RsvpForm } from '../../components/RsvpForm';
 import { RsvpReadOnly } from '../../components/RsvpReadOnly';
+import { LosEsperamos } from '../../components/LosEsperamos';
 
 import { getConfig, getInvitation, checkScheduleCoherence } from '../../lib/registry';
 import { SheetsError, explainSheetsError } from '../../lib/google/sheets';
-import { backgroundMusic, churchPhoto, couplePhoto, venuePhoto } from '../../lib/photos';
+import { backgroundMusic, churchPhoto, closingPhoto, couplePhoto, venuePhoto } from '../../lib/photos';
 import { serverNow, isRsvpClosed } from '../../lib/clock';
 import { TIMEZONE } from '../../lib/time';
 import { copy } from '../../lib/copy';
@@ -29,8 +30,13 @@ import { copy } from '../../lib/copy';
  * ── El ritmo de la página ────────────────────────────────────────────────────
  * Alternan tres tratamientos, y cada uno responde a lo que hace la sección:
  *
- *   franjas    contador y confirmación van a sangre, sin fondo y sin esquinas.
- *              Cortan la página y dejan ver el cielo entero.
+ *   franjas    contador y confirmación van a sangre, sin fondo y sin esquinas,
+ *              una detrás de otra. Cortan la página y dejan ver el cielo entero.
+ *
+ * La confirmación va ARRIBA, pegada al contador, y no al final. Quien abre la
+ * invitación ya sabe si puede ir: hacerlo bajar por toda la logística antes de
+ * dejarlo contestar es cobrarle un peaje. Los que quieran los detalles siguen
+ * bajando; los que solo venían a confirmar ya terminaron.
  *   tarjetas   misa y recepción van en panel oscuro con filete. Son bloques de
  *              información que se consultan.
  *   crema      el dress code, y solo el dress code. Es la única sección que
@@ -110,6 +116,23 @@ export default async function InvitationPage({ params }: PageProps) {
           />
         </section>
 
+        {/* La confirmación va a sangre y sin fondo, igual que el contador: el
+            cielo se ve a través. El `data-sky-guard` se acota al bloque de
+            contenido —no a la sección entera— para que las estrellas solo se
+            atenúen detrás del texto y no queden apagadas de lado a lado.
+
+            Es la sección más exigente en legibilidad de toda la invitación:
+            aquí no se lee, se decide. */}
+        <section className="border-b border-oro/25 px-5 pb-16 pt-16">
+          <div data-sky-guard className="mx-auto max-w-md">
+            {closed ? (
+              <RsvpReadOnly guests={invitation.guests} />
+            ) : (
+              <RsvpForm token={invitation.token} guests={invitation.guests} />
+            )}
+          </div>
+        </section>
+
         <MisaSection
           title={copy.misa.title}
           at={config.misaAt}
@@ -133,22 +156,8 @@ export default async function InvitationPage({ params }: PageProps) {
           reserva={config.dressCodeReserva}
         />
 
-        {/* La confirmación va a sangre y sin fondo, igual que el contador: el
-            cielo se ve a través. El `data-sky-guard` se acota al bloque de
-            contenido —no a la sección entera— para que las estrellas solo se
-            atenúen detrás del texto y no queden apagadas de lado a lado.
-
-            Es la sección más exigente en legibilidad de toda la invitación:
-            aquí no se lee, se decide. */}
-        <section className="border-t border-oro/25 px-5 pb-28 pt-16">
-          <div data-sky-guard className="mx-auto max-w-md">
-            {closed ? (
-              <RsvpReadOnly guests={invitation.guests} />
-            ) : (
-              <RsvpForm token={invitation.token} guests={invitation.guests} />
-            )}
-          </div>
-        </section>
+        {/* Cierre. Lo último que ve el invitado son ellos dos. */}
+        <LosEsperamos photo={closingPhoto} />
       </main>
     </>
   );

@@ -112,7 +112,15 @@ export function RsvpForm({ token, guests }: RsvpFormProps) {
         <p className="mt-4 font-body text-[0.68rem] font-normal uppercase tracking-[0.34em] text-luz">
           {copy.rsvp.epigrafe}
         </p>
-        <p className="mt-2.5 font-display text-[clamp(1.75rem,7.5vw,2.4rem)] leading-tight tracking-[0.03em]">
+        {/*
+          En Jost peso 500, no en Italiana.
+
+          Italiana aguanta bien sobre la crema del dress code —tinta oscura
+          sobre claro—, pero en hueso sobre fondo oscuro sus trazos finos se
+          comen. Y por la regla que ya nos costó cinco correcciones: esto no es
+          ornamento, es el dato que dice cuántos lugares tiene la invitación.
+        */}
+        <p className="mt-3 font-body text-[clamp(2.1rem,9vw,2.9rem)] font-medium leading-none tracking-[0.01em]">
           {copy.rsvp.pases(guests.length)}
         </p>
         <p className="mx-auto mt-3.5 max-w-[34ch] font-body text-[1rem] font-light leading-relaxed text-hueso/70">

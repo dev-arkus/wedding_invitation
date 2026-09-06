@@ -45,17 +45,17 @@ export function DressCodeRefs({
 
       <div className="pb-6">
         {open && (
-          <ul className="grid grid-cols-3 gap-2.5">
+          <ul className="grid grid-cols-2 gap-3">
             {refs.map((ref) => (
-              <li key={ref.src} className="relative aspect-[2/3] overflow-hidden rounded-lg">
+              <li key={ref.src} className="relative aspect-square overflow-hidden rounded-lg bg-white ring-1 ring-navy/10">
                 <ZoomablePhoto
                   photo={ref}
                   className="h-full"
-                  sizes="(max-width: 640px) 33vw, 160px"
+                  sizes="(max-width: 640px) 45vw, 210px"
                   eager
                   // Sin viraje de color: para juzgar un vestido hay que ver su
                   // color real, al revés que las fotos de los lugares.
-                  imageClassName="bg-navy object-cover"
+                  imageClassName="bg-white object-cover"
                 />
               </li>
             ))}

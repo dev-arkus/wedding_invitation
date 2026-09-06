@@ -54,7 +54,7 @@ export const copy = {
      */
     reserva: 'Evitar color verde oliva y blanco, o tonos que se asemejen.',
     referencias: {
-      titulo: '¿Qué me pongo?',
+      titulo: 'Algunas ideas',
       nota: 'Son solo ideas para orientarte. Si ya tienes algo que te encanta, ese es el vestuario correcto.',
     },
   },
