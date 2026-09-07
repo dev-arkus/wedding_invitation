@@ -153,7 +153,6 @@ export default async function InvitationPage({ params }: PageProps) {
         <DressCode
           nivel={config.dressCode || copy.dressCode.nivelPorDefecto}
           glosa={config.dressCodeGlosa}
-          reserva={config.dressCodeReserva}
         />
 
         {/* Cierre. Lo último que ve el invitado son ellos dos. */}

@@ -13,7 +13,7 @@ import { dressCodeRefs } from '../lib/photos';
  *   1. ¿qué nivel es?        el titular
  *   2. ¿qué significa?       la glosa
  *   3. ¿y en concreto?       las dos siluetas
- *   4. ¿hay algo prohibido?  la reserva de colores
+ *   4. ¿hay algo prohibido?  el aviso bajo cada silueta
  *   5. ¿me das ejemplos?     el desplegable
  *
  * Lo que se cayó respecto a la versión anterior fueron las muestras de la
@@ -21,15 +21,7 @@ import { dressCodeRefs } from '../lib/photos';
  * verdad necesita; enseñarle los seis colores de la boda no le dice qué
  * ponerse.
  */
-export function DressCode({
-  nivel,
-  glosa,
-  reserva,
-}: {
-  nivel: string;
-  glosa?: string;
-  reserva?: string;
-}) {
+export function DressCode({ nivel, glosa }: { nivel: string; glosa?: string }) {
   // Sin nivel definido la sección entera desaparece: sin título huérfano, sin
   // "por confirmar", sin hueco.
   if (!nivel) return null;
@@ -57,22 +49,22 @@ export function DressCode({
         <Rule tone="claro" className="mx-auto mt-9" />
 
         <div className="mt-9 flex flex-wrap justify-center gap-x-[clamp(0.75rem,5vw,2.5rem)] gap-y-10">
-          <Silueta titulo={c.ellos.titulo} texto={c.ellos.texto} tipo="traje" />
-          <Silueta titulo={c.ellas.titulo} texto={c.ellas.texto} tipo="vestido" />
+          <Silueta {...c.ellos} tipo="traje" />
+          <Silueta {...c.ellas} tipo="vestido" />
         </div>
 
-        <p className="mx-auto mb-9 mt-11 max-w-[32ch] font-body text-[1rem] font-normal leading-relaxed text-oro-tinta">
-          {reserva || c.reserva}
-        </p>
-
+        {/* El aire va aquí y no en el bloque de siluetas: así solo existe
+            cuando hay desplegable, y la sección no cierra con un hueco
+            colgando si algún día se quitan las referencias. */}
         {dressCodeRefs.length > 0 && (
-          <DressCodeRefs
-            refs={dressCodeRefs}
-            titulo={c.referencias.titulo}
-            nota={c.referencias.nota}
-          />
+          <div className="mt-12">
+            <DressCodeRefs
+              refs={dressCodeRefs}
+              titulo={c.referencias.titulo}
+              nota={c.referencias.nota}
+            />
+          </div>
         )}
-
       </div>
     </section>
   );
@@ -85,7 +77,17 @@ export function DressCode({
  * lee como una instrucción de comprar ESE traje. Una línea comunica la forma y
  * deja la elección abierta, que es justo lo que dice el texto de abajo.
  */
-function Silueta({ titulo, texto, tipo }: { titulo: string; texto: string; tipo: 'traje' | 'vestido' }) {
+function Silueta({
+  titulo,
+  texto,
+  aviso,
+  tipo,
+}: {
+  titulo: string;
+  texto: string;
+  aviso: string;
+  tipo: 'traje' | 'vestido';
+}) {
   return (
     <div className="w-[10rem]">
       <svg
@@ -116,6 +118,12 @@ function Silueta({ titulo, texto, tipo }: { titulo: string; texto: string; tipo:
 
       <h3 className="mb-2 font-display text-[1.65rem] leading-tight">{titulo}</h3>
       <p className="font-body text-[1rem] font-normal leading-relaxed text-navy/85">{texto}</p>
+
+      {/* En dorado de tinta, el mismo que tenía la frase suelta: es lo único
+          que hay que evitar, y tiene que saltar sobre el resto. */}
+      <p className="mt-2.5 font-body text-[0.95rem] font-normal leading-snug text-oro-tinta">
+        {aviso}
+      </p>
     </div>
   );
 }

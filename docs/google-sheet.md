@@ -97,7 +97,6 @@ Fila 1: `clave | valor`
 | `recepcion_coords` | | |
 | `dress_code` | `Etiqueta formal` | se usa "Etiqueta formal" |
 | `dress_code_glosa` | `Vestido largo y traje oscuro…` | se usa el texto por defecto |
-| `dress_code_reserva` | `Solo dos colores quedan apartados…` | se usa el texto por defecto |
 | `mensaje_cierre` | `Los esperamos` | se omite |
 
 **Las horas se escriben como `YYYY-MM-DD HH:mm`, en hora de Venezuela.** Si una no se entiende, la aplicación usa el instante de respaldo, deja una advertencia en el log y **sigue funcionando**: el conteo regresivo nunca se cae por un dedazo.

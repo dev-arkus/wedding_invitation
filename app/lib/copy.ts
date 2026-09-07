@@ -46,13 +46,23 @@ export const copy = {
     /** Se usa si `dress_code` está vacío en la pestaña Config. */
     nivelPorDefecto: 'Etiqueta formal',
     glosa: 'Vestido largo y traje.',
-    ellos: { titulo: 'Ellos', texto: 'Esmoquin o traje, con corbata o corbatín.' },
-    ellas: { titulo: 'Ellas', texto: 'Vestido largo, en el tono que prefieras.' },
     /**
-     * La única restricción. Se dice qué evitar, no qué ponerse: es lo que el
-     * invitado necesita saber, y es más corto que enumerar una paleta.
+     * El aviso de color va PEGADO a cada silueta, no en una frase aparte.
+     *
+     * Antes era una línea suelta que hablaba de los dos colores a la vez, y
+     * obligaba al invitado a decidir cuál le tocaba. Puesto debajo de su propia
+     * figura, cada quien lee solo lo suyo.
      */
-    reserva: 'Evitar color verde oliva y blanco, o tonos que se asemejen.',
+    ellos: {
+      titulo: 'Ellos',
+      texto: 'Esmoquin o traje, con corbata o corbatín.',
+      aviso: 'Evitar color verde oliva.',
+    },
+    ellas: {
+      titulo: 'Ellas',
+      texto: 'Vestido largo, en el tono que prefieras.',
+      aviso: 'Evitar color blanco o tonos que se asemejen.',
+    },
     referencias: {
       titulo: 'Algunas ideas',
       nota: 'Son solo ideas para orientarte. Si ya tienes algo que te encanta, ese es el vestuario correcto.',
